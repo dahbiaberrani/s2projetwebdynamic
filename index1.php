@@ -34,7 +34,7 @@
                         echo("Désolé, accès à la base  impossible\n");
                         exit;
                     }
-                    mysqli_query("SET NAMES 'utf8'");
+                    mysqli_set_charset($connexion, "utf8");
              // Récupération des recettes 
               $requette="SELECT Recettes.Nomrecette,Recettes.Imagepath,Ingredients.Nomingredient,Compositions.Quantitee,Recettes.Etapes FROM `Ingredients` join Compositions USING(Idingredient) JOIN Recettes USING(Idrecette) ";      
               $requette2="SELECT commentaire FROM Commentaires ";
