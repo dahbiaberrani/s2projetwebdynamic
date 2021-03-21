@@ -37,19 +37,33 @@
                     }
                     mysqli_set_charset($connexion, "utf8");
              // Récupération des recettes 
-              $requette="SELECT Nomrecette,Imagepath,Etapes FROM Recettes  ";      
+              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes FROM Recettes  ";      
                
-              $requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
+              //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
               
-              $table_resultat =  mysqli_query($connexion,$requette);
+              $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
             // affichage chaque recettes
-            if($table_resultat){
+            if($table_recette_resultat){
                 echo ("Bienvenue sur mon site ");
 
-                while($ligne=mysqli_fetch_object($table_resultat))
-           
-                {
-                echo ("<h1>".$ligne->Nomrecette."</h1><img src=".$ligne->Imagepath."><br>");
+                while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
+                    echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br>");
+
+
+                    // __________________________affichage chaque Ingrediens 
+                    $requette_composant="SELECT Nomingredient,Quantitee FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $ligne_recette->Idrecette ";
+                    $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
+                    if($table_composant_resultat){
+                        echo ("Ingredients de recettes <ul> ");
+                        
+                        while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
+                            echo ("<li>".$ligne_composant->Nomingredient.": ".$ligne_composant->Quantitee."g</li>");
+                        }
+                        echo "</ul>";
+                    }else{
+                        echo "<p>Erreur dans l'exécution de la requette</p>";
+                        echo"message de mysqli:".mysqli_error($connexion);
+                    }
                 }
 
             }else{
@@ -57,22 +71,7 @@
                 echo"message de mysqli:".mysqli_error($connexion);
             }
 
-                // __________________________affichage chaque Ingrediens 
-            $requette1="SELECT Nomingredient FROM Ingredients  ";
-            $table_resultat =  mysqli_query($connexion,$requette1);   
-            if($table_resultat){
-                echo ("Ingredients de recettes  ");
 
-                while($ligne=mysqli_fetch_object($table_resultat))
-            
-                {
-                echo ("<p>".$ligne->Nomingredient."</p>");
-                }
-    
-            }else{
-                echo "<p>Erreur dans l'exécution de la requette</p>";
-                echo"message de mysqli:".mysqli_error($connexion);
-            }
 
 
                  // __________________________affichage chaque Quantitée recette  
