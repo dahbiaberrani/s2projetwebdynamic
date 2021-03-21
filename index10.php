@@ -37,7 +37,7 @@
                     }
                     mysqli_set_charset($connexion, "utf8");
              // Récupération des recettes 
-              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes FROM Recettes  ";      
+              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes  ";      
                
               //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
               
@@ -47,7 +47,7 @@
                 echo ("Bienvenue sur mon site ");
 
                 while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
-                    echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br>");
+                    echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne</h4>");
 
 
                     // __________________________affichage chaque Ingrediens 
