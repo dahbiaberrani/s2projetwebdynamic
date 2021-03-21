@@ -54,7 +54,7 @@
                     $requette_composant="SELECT Nomingredient,Quantitee FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $ligne_recette->Idrecette ";
                     $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
                     if($table_composant_resultat){
-                        echo ("Ingredients de recettes <ul> ");
+                        echo ("Ingredients: <ul> ");
                         
                         while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
                             echo ("<li>".$ligne_composant->Nomingredient.": ".$ligne_composant->Quantitee."g</li>");
@@ -64,7 +64,24 @@
                         echo "<p>Erreur dans l'exécution de la requette</p>";
                         echo"message de mysqli:".mysqli_error($connexion);
                     }
+
+                    // __________________________affichage chaque Commentaires 
+                    $requette_commentaire="SELECT Commentaire,Idrecette,Datecommentaire FROM Commentaires where Idrecette = $ligne_recette->Idrecette";
+                    $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+                    if($table_commentaire_resultat){
+                        echo ("Commentaires:<ul> ");
+                        
+                        while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
+                            echo ("<li>".$ligne_commentaire->Datecommentaire.": ".$ligne_commentaire->Commentaire."</li>");
+                        }
+                        echo "</ul>";
+                    }else{
+                        echo "<p>Erreur dans l'exécution de la requette</p>";
+                        echo"message de mysqli:".mysqli_error($connexion);
+                    }
+
                 }
+
 
             }else{
                 echo "<p>Erreur dans l'exécution de la requette</p>";
@@ -74,22 +91,7 @@
 
 
 
-                 // __________________________affichage chaque Quantitée recette  
-            $requette3="SELECT commentaire FROM Commentaires ";
-            $table_resultat =  mysqli_query($connexion,$requette3);   
-            if($table_resultat){
-                echo ("Commentaire de la recette  crèpe salée ");
-                
-                while($ligne=mysqli_fetch_object($table_resultat))
-                            
-                {
-                echo ("<p>".$ligne->commentaire."</p>");
-                }
-                    
-                }else{
-                echo "<p>Erreur dans l'exécution de la requette</p>";
-                echo"message de mysqli:".mysqli_error($connexion);
-            }
+
            
             mysqli_close($connexion);
                 
