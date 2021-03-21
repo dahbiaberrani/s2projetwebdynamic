@@ -64,6 +64,8 @@
                         echo "<p>Erreur dans l'exécution de la requette</p>";
                         echo"message de mysqli:".mysqli_error($connexion);
                     }
+                    // affichage des Etapes recettes    
+                    echo"<p>".$ligne_recette->Etapes."</p>";
 
                     // __________________________affichage chaque Commentaires 
                     $requette_commentaire="SELECT Commentaire,Idrecette,Datecommentaire FROM Commentaires where Idrecette = $ligne_recette->Idrecette";
