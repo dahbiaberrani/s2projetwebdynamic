@@ -51,13 +51,13 @@
 
 
                     // __________________________affichage chaque Ingrediens 
-                    $requette_composant="SELECT Nomingredient,Quantitee FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $ligne_recette->Idrecette ";
+                    $requette_composant="SELECT Nomingredient,Quantitee,Unite FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $ligne_recette->Idrecette ";
                     $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
                     if($table_composant_resultat){
                         echo ("Ingredients: <ul> ");
                         
                         while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
-                            echo ("<li>".$ligne_composant->Nomingredient.": ".$ligne_composant->Quantitee."g</li>");
+                            echo ("<li>".$ligne_composant->Quantitee."".$ligne_composant->Unite." ".$ligne_composant->Nomingredient."</li>");
                         }
                         echo "</ul>";
                     }else{
