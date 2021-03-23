@@ -96,10 +96,14 @@
 
            
             mysqli_close($connexion);
-                
+
 
         ?>
+        
       <?php include("pied_de_page.php");?>
   </body>
 
   </html>
+
+
+  
