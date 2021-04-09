@@ -4,25 +4,29 @@
   <head>
       <meta charset="utf-8" />
       <title>Mon site </title>
+      
+      
   </head>
-  <header>
+ 
 
       <!-- Le menu -->
 
-      <?php include("entete.php");include("page1.php") ?>
+      <?php include("entete.html");include("toutrecette.php");include("entre.php");include("dessert.php") ?>
 
       <!-- Le corps -->
-  </header>
+
 
   <body>
       <p>Ces recettes peuvent t'intéresser :</p>
 
     <?php
-    affichertout();
+    affichedessert();
+    //afficherEntre();
+    //affichertout();
     ?>
      
         
-      <?php include("pied_de_page.php");?>
+      <?php include("pied_de_page.html");?>
   </body>
 
   </html>

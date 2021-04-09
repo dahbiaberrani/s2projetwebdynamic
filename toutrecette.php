@@ -24,7 +24,6 @@
               //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
               
               $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
-              
             // affichage chaque recettes
             if($table_recette_resultat){
                 echo ("Bienvenue sur mon site ");
@@ -57,7 +56,7 @@
                         echo ("Commentaires:<ul> ");
                         
                         while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
-                            echo ("<li>".$ligne_commentaire->Datecommentaire.": ".$ligne_commentaire->Commentaire."</li>");
+                            echo ("<li>".htmlspecialchars($ligne_commentaire->Datecommentaire).": ".htmlspecialchars($ligne_commentaire->Commentaire)."</li>");
                         }
                         echo "</ul>";
                     }else{
@@ -81,4 +80,4 @@
             mysqli_close($connexion);
         }
 
-        ?>
+?>
