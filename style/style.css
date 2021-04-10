@@ -1,20 +1,45 @@
-
+/*body{
+    background-image: url(../images/acceui.PNG);
+    background-size:cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}*/
 #menu li {
     list-style-type: none;
 }
 #menu  ul  li  a{
     display: inline-block;
     text-decoration: none;
+    text-align: center;
+    font-weight: bolder;
+    
+    color: blue;
 }
 header {
-    
+    width: 100%;
     top: 0;
     left: 0;
     width: 100%;
-    background-color: aqua;
+    background-color: rgb(75, 209, 209);
    
+}
+#menu > ul > li {
+    position: relative;
+    padding-left: 40px ;
+   display: inline;
 }
 h1{
     color: blue;
     text-align: center;
+}
+#cibleimgacceuil {
+    padding-left: 400px;
+    padding-top: 100px;
+    width: 60%;
+}
+
+
+footer{
+    background-color: rgb(75, 209, 209);;
+    position: fixed;
 }

@@ -1,5 +1,5 @@
 <?php 
-
+   
     function afficherEntre(){
         // Connexion à la base de données
              
@@ -26,7 +26,7 @@
               $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
             // affichage chaque recettes
             if($table_recette_resultat){
-                echo ("Bienvenue sur mon site ");
+               
 
                 while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
                     echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne</h4>");
@@ -75,9 +75,9 @@
 
 
 
-
-           
-            mysqli_close($connexion);
         }
-
+        
+      
+           
+        mysqli_close($connexion);
 ?>

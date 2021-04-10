@@ -11,7 +11,7 @@
 
       <!-- Le menu -->
 
-      <?php include("entete.html");include("toutrecette.php");include("entre.php");include("dessert.php") ?>
+      <?php include("entete.html");include("toutrecette.php");include("entre.php");include("dessert.php");include("plat.php") ?>
 
       <!-- Le corps -->
 
@@ -20,6 +20,7 @@
       <p>Ces recettes peuvent t'intéresser :</p>
 
     <?php
+    afficheplat();
     affichedessert();
     //afficherEntre();
     //affichertout();
@@ -28,7 +29,6 @@
         
       <?php include("pied_de_page.html");?>
   </body>
-
   </html>
 
 
