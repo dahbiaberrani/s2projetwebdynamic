@@ -1,30 +1,37 @@
 <?php  
-   echo phpversion();
+  
 
-/**
-* @return bool
-*/
-function is_session_started()
-{
-    if ( php_sapi_name() !== 'cli' ) {
-        if ( version_compare(phpversion(), '5.4.0', '>=') ) {
-            return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
-        } else {
-            return session_id() === '' ? FALSE : TRUE;
+   /**
+   * @return bool
+   */
+    function is_session_started(){
+        if ( php_sapi_name() !== 'cli' ) {
+            if ( version_compare(phpversion(), '5.4.0', '>=') ) {
+                return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
+           } else {
+                return session_id() === '' ? FALSE : TRUE;
+            }
         }
+    
+        return FALSE;
     }
-    return FALSE;
-}
 
-// Ouverture d'une session
-if ( is_session_started() === FALSE ){
-    session_start();
-    echo "ouvrture de session N°: </br>";
-    echo session_id();
-} 
+
+
+    // Ouverture d'une session
+    if ( is_session_started() === FALSE ){
+        session_start();
+    } 
+
+    if (isset($_POST['annuler'])){
+        //Annulation de toutes les variable de session
+        session_destroy(); 
+        unset($_SESSION["mes_ingredients"]);
+        $_SESSION=array();
+    }
+
+     
 ?>
-
-
 
 <html>
 
@@ -34,19 +41,18 @@ if ( is_session_started() === FALSE ){
 
  <body>
 
-   <h2>Ajouter des nouveau recettes</h2></br>
+    <h2>Ajouter des nouveau recettes</h2></br>
 
   <form action="nouveauRecettes.php" method="POST">
     <!-- Nom recette -->
-        <label for="Nom">Nom Recette</label>
-        <input  id="Nom" name="Nom" type="text"> </br>
+        <label for="NomRecette">Nom Recette</label>
+        <input  id="NomRecette" name="NomRecette" type="text" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['NomRecette'];} ?>" > </br>
 
     <!-- choix Catégorie recette -->
          <label for="categorie">catégorie:</label> 
    <select  id="categorie" name="Catégorie" type="text"> 
+     <option value="" ></option></br>
 <?php 
-
-    
     $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
     if (!$connexion) {
         echo("Desolé, connexion au serveur impossible\n");
@@ -72,8 +78,8 @@ if ( is_session_started() === FALSE ){
 ?>
 </select></br>
      <!-- ajouter nombre de personne  -->
-    <label for="Nombrepersonne ">Nombre personne </label>
-    <input  id="Nombrepersonnenre" name="Nombrepersonne" type="number"> </br>
+    <label for="NombrePersonne ">Nombre personne </label>
+    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['NombrePersonne'];} ?>"> </br>
 
 
        <!-- selectionner les ingredient de recettes  -->
@@ -110,7 +116,7 @@ if ( is_session_started() === FALSE ){
 
 
 ?>
-</select>
+   </select>
             <!-- ajouter la quantite   -->
     <label for="Quantite">Quantite </label>
     <input  id="Quantite" name="Quantite" type="numbre" >
@@ -122,8 +128,7 @@ if ( is_session_started() === FALSE ){
         <option value="ml" name="ml" type="text">ml</option>
         <option value=" " name="sans unite" type="text" >unité</option>
     </select></br>
-        <input  type="submit"  value="ajouter" name="Valider"/> 
-        <input type="reset" name="btAnnuler" value="Annuler" /></p>
+        <input  type="submit"  value="ajouter" name="ajouter"/> 
 
 <?php
     $unite = $_POST['unite'];
@@ -132,9 +137,15 @@ if ( is_session_started() === FALSE ){
             $_SESSION["mes_ingredients"] = array() ;
         }
  
-        if (isset($_POST['Valider'])){
-            $nom = $_POST['NomIngredient'];
-            $_SESSION["mes_ingredients"]+=array($nom=>$quantite);
+        if (isset($_POST['ajouter'])){
+            $nomIngredient = $_POST['NomIngredient'];
+            //$nomRecette = $_POST['NomRecette'];
+            //sauvegarde de la saisie de l'utilsateur 
+            $_SESSION["mes_ingredients"]+=array($nomIngredient=>$quantite);
+           // $_SESSION["nom_recette"]= $nomRecette;
+           
+
+
             echo"ingredient ajouter à la recette: </br> ";
          
            //echo $_SESSION["mes_ingredients"];
@@ -151,15 +162,14 @@ if ( is_session_started() === FALSE ){
         } 
 ?>
 
-
-
      <!-- ajouter etapes de prepartion recette  -->
    <label for="etapes">Etapes de preparation</label></br>
-    <textarea  id="etapes" name="etapes" cols="50" rows="20"> </textarea></br>  
+    <textarea  id="etapes" name="etapes" cols="50" rows="20"  value="<?php if (!isset($_POST['annuler'])){ echo $_POST['etapes'];} ?>"> </textarea></br>  
 
 	
-        <input value="ajouter la recette" type="submit"/> 
-	<input type="reset" name="btAnnuler" value="Annuler" /></p>
+    <input value="Envoyer" type="submit"/> 
+    <input value="annuler" type="submit"/> 
+
     </form>
 
 
