@@ -50,9 +50,10 @@
 
     <!-- choix Catégorie recette -->
          <label for="categorie">catégorie:</label> 
-   <select  id="categorie" name="Catégorie" type="text"> 
+   <select  id="categorie" name="categorie" type="text"> 
      <option value="" ></option></br>
 <?php 
+
     $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
     if (!$connexion) {
         echo("Desolé, connexion au serveur impossible\n");
@@ -68,9 +69,16 @@
     if($resultat){
         
         while($ligne=mysqli_fetch_object($resultat)){
-
-            echo ("<option value=\"".$ligne->Nomcategorie."\"> ".$ligne->Nomcategorie ."</option>\n");
+            if(  $_POST['categorie']==$ligne->Nomcategorie){
+                echo ("<option value=\"".$ligne->Nomcategorie."\"selected=\"selected\">".$ligne->Nomcategorie ."</option>\n");
+                
+            }
+            else{
+                echo ("<option value=\"".$ligne->Nomcategorie."\"> ".$ligne->Nomcategorie ."</option>\n");
+            }
+            
         }
+
     }else{
         echo "<p>Erreur dans l'exécution de la requette</p>";
         echo"message de mysqli:".mysqli_error($connexion);
@@ -164,7 +172,7 @@
 
      <!-- ajouter etapes de prepartion recette  -->
    <label for="etapes">Etapes de preparation</label></br>
-    <textarea  id="etapes" name="etapes" cols="50" rows="20"  value="<?php if (!isset($_POST['annuler'])){ echo $_POST['etapes'];} ?>"> </textarea></br>  
+    <textarea  id="etapes" name="etapes" cols="50" rows="20" > <?php if (!isset($_POST['annuler'])){ echo $_POST['etapes'];} ?></textarea></br>  
 
 	
     <input value="Envoyer" type="submit"/> 
