@@ -1,30 +1,28 @@
 <?php 
-
+    include 'libDataBase.php';     
+ 
     function affichertout(){
-        // Connexion à la base de données
-             
-	                $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
         
-                    if (!$connexion) {
-                        echo("Desolé, connexion au serveur impossible\n");
-                        exit;
-                      }
+             
+
+    //connexion à la base de donnees 
+        $connexion= my_connect();
 
 
-                    //selection de la base donnees
+    //selection de la base donnees
 
-                    if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-                        echo("Désolé, accès à la base  impossible\n");
-                        exit;
-                    }
+        if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
+            echo("Désolé, accès à la base  impossible\n");
+            exit;
+        }
                     mysqli_set_charset($connexion, "utf8");
-             // Récupération des recettes 
-              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes  ";      
+        // Récupération des recettes 
+        $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes  ";      
                
-              //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
+        //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
               
-              $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
-            // affichage chaque recettes
+        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+        // affichage chaque recettes
             if($table_recette_resultat){
                 echo ("Bienvenue sur mon site ");
 
@@ -63,20 +61,12 @@
                         echo "<p>Erreur dans l'exécution de la requette</p>";
                         echo"message de mysqli:".mysqli_error($connexion);
                     }
-
                 }
-
-
             }else{
                 echo "<p>Erreur dans l'exécution de la requette</p>";
                 echo"message de mysqli:".mysqli_error($connexion);
             }
-
-
-
-
-
-           
+ 
             mysqli_close($connexion);
         }
 

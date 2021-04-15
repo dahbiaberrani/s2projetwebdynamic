@@ -1,11 +1,7 @@
 <?php 
 
-    $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
-  
-    if (!$connexion) {
-        echo("Desolé, connexion au serveur impossible\n");
-        exit();
-      }
+    include 'libDataBase.php';     
+    $connexion= my_connect();
    
 
     if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {

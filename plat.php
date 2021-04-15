@@ -1,17 +1,12 @@
 <?php
     
 
-
+    include 'libDataBase.php';   
         function afficheplat(){
             // Connexion à la base de données
                  
-                        $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
-            
-                        if (!$connexion) {
-                            echo("Desolé, connexion au serveur impossible\n");
-                            exit;
-                          }
-    
+       
+            $connexion= my_connect();
     
                         //selection de la base donnees
     
