@@ -26,8 +26,6 @@ include_once('./libDataBase.php') ;
     if (isset($_POST['annuler'])){
         //Annulation de toutes les variable de session
         session_destroy(); 
-        unset($_SESSION["mes_ingredients"]);
-        $_SESSION=array();
     }
 
      
@@ -182,8 +180,8 @@ include_once('./libDataBase.php') ;
     <textarea  id="etapes" name="etapes" cols="50" rows="20" > <?php if (!isset($_POST['annuler'])){ echo $_POST['etapes'];} ?></textarea></br>  
     
    
-    <input value="Envoyer" type="submit"/> 
-    <input value="annuler" type="submit"/> 
+    <input value="Envoyer" name="Envoyer" type="submit"/> 
+    <input value="annuler" name="annuler" type="submit"/> 
 
     </form>
 
@@ -222,8 +220,8 @@ include_once('./libDataBase.php') ;
 
     if (isset($_POST['Envoyer'])){
         if (empty( $_POST["NomRecette"]) or empty($_POST["categorie"]) or empty($_POST["NombrePersonne"]) or empty($_POST["Idingredient"]) or empty($_POST["Quantite"]) or empty( $_POST["unite"]) or empty($_POST["etapes"])){
-       
-            echo"Formulaire incomplet";
+      
+            echo"<h1 >Formulaire incomplet</h1>";
             
         }else{
             $requette1=("INSERT INTO `Recettes` ( `Nomrecette`, `Etapes`, `Nomcategorie`, `Nombrepersonne`) 
@@ -255,6 +253,8 @@ include_once('./libDataBase.php') ;
             }
 
         }
+        
+
    
     }
 ?>
