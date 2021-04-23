@@ -19,7 +19,7 @@
             }
             mysqli_set_charset($connexion, "utf8");
             // Récupération des recettes 
-            $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes where Nomcategorie = 'Plat' ";      
+            $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes where Nomcategorie = 'Plat'  ";      
                 
             //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
                 

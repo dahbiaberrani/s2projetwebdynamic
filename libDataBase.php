@@ -74,6 +74,8 @@
             $cout = 3;
         }elseif ($res_cout == "moyen_cher"){
             $cout = 10;
+        }elseif ($res_cout == "*"){
+            $cout = 100
         }
       
         $connexion= my_connect();
