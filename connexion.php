@@ -28,7 +28,7 @@
                 if(password_verify($passworde,$user->password ))
                 {
                     $_SESSION['user'] = $_POST['email'];
-                    header('Location: Acceuil.html');
+                    header('Location: index.html');
                    
                     exit();
                 }else{ 

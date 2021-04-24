@@ -1,59 +1,39 @@
-<!DOCTYPE html>
-    <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <meta name="author" content="NoS1gnal"/>
+<?php 
+    
+    $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
+    if (!$connexion){
+        echo ("désolé,connexion au serveur impossible\n");
+        exit;
+    }
 
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-            <title>Connexion</title>
-        </head>
-        <body>
-        <div class="login-form">
-         
-            
-            <form action="inscription_traitement.php" method="post">
-                <h2 class="text-center">Inscription</h2>       
-                <div class="form-group">
-                    <input type="text" name="pseudo" class="form-control" placeholder="Pseudo" required="required" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" class="form-control" placeholder="Email" required="required" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password" class="form-control" placeholder="Mot de passe" required="required" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password_retype" class="form-control" placeholder="Re-tapez le mot de passe" required="required" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block">Inscription</button>
-                </div>   
-            </form>
-        </div>
-        <style>
-            .login-form {
-                width: 340px;
-                margin: 50px auto;
-            }
-            .login-form form {
-                margin-bottom: 15px;
-                background: #f7f7f7;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-                padding: 30px;
-            }
-            .login-form h2 {
-                margin: 0 0 15px;
-            }
-            .form-control, .btn {
-                min-height: 38px;
-                border-radius: 2px;
-            }
-            .btn {        
-                font-size: 15px;
-                font-weight: bold;
-            }
-        </style>
-        </body>
-</html>
+    //selection de la base donnees
+
+    if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
+        echo("Désolé, accès à la base  impossible\n");
+        exit;
+    }
+    mysqli_set_charset($connexion, "utf8");
+    if(!empty($_POST['pseudo']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['password_retype']))
+    {
+        $pseudo = htmlspecialchars($_POST['pseudo']);
+        $email = htmlspecialchars($_POST['email']);
+        $passworde = htmlspecialchars($_POST['password']);
+        $password_retype = htmlspecialchars($_POST['password_retype']);
+
+        if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+            if($passworde === $password_retype){
+
+                require("password.php");
+                $user = mysqli_fetch_object ($resultat);
+                
+                $mdp_hached = password_hash($passworde,PASSWORD_BCRYPT);
+
+                
+                $requette1="INSERT INTO `Utilisateurs`(`pseudo`, `email`, `password`) 
+                                VALUES(\"".$pseudo."\", \"".$email."\", \"".$mdp_hached."\")";
+                $resultat1 =  mysqli_query($connexion,$requette1);
+                
+                header('Location:./connexion.html');exit();
+            }else{ header('Location: inscription.php?reg_err=password'); exit();}
+        }
+    }
