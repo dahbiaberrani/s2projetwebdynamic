@@ -7,6 +7,14 @@
             exit;
         }
         else {
+            
+            //selection de la base donnees
+
+            if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
+                echo("Désolé, accès à la base  impossible\n");
+                exit;
+            }
+            mysqli_set_charset($connexion, "utf8");
             return $connexion;
         }
     }
@@ -14,11 +22,7 @@
     // recupère le nom Idingredient 
     function getIngredientNameById($_idIngredient){
         $connexion= my_connect();
-        if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-            echo("Désolé, accès à la base  impossible\n");
-            exit;
-        }
-        mysqli_set_charset($connexion, "utf8");
+
         $requette=("SELECT  Idingredient, Nomingredient From Ingredients where Idingredient = $_idIngredient");      
         $resultat =  mysqli_query($connexion,$requette);
         if($resultat){
@@ -35,10 +39,7 @@
     
     function calculCout($_ingredientArray,$_unitArray){
         $connexion= my_connect();
-        if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-            echo("Désolé, accès à la base  impossible\n");
-            exit;
-        }
+
         $_cout_recette = 0;
         foreach( $_ingredientArray  as $id_ingredient=>$quantite ) { 
             
@@ -63,28 +64,21 @@
 
     }
 
-    // fonction qui chercher des recettes par cour définit:
+    // fonction qui chercher des recettes par cout définit:
  
     function afficherParCout(){
         $res_cout = $_GET['cout'];
-        if ($res_cout == "moins_cher"){
-            $cout = 5;
-    
-        }elseif ($res_cout == "moins_3"){
+        if ($res_cout == "moins_3"){
             $cout = 3;
-        }elseif ($res_cout == "moyen_cher"){
+    
+        }elseif ($res_cout == "moins_5"){
+            $cout = 5;
+        }elseif ($res_cout == "moyen_10"){
             $cout = 10;
-        }elseif ($res_cout == "*"){
-            $cout = 100;
         }
       
         $connexion= my_connect();
-        //selection de la base donnees
-        if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-            echo("Désolé, accès à la base  impossible\n");
-            exit;
-        }
-        mysqli_set_charset($connexion, "utf8");
+      
         // Récupération des recettes 
         
         $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes  where Cout <= $cout ";      
