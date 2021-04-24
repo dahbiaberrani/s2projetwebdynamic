@@ -43,3 +43,15 @@ footer{
     background-color: rgb(75, 209, 209);;
     position: fixed;
 }
+table {
+    border-width:1px; 
+    border-style:solid; 
+    border-color:black;
+    width:50%;
+    }
+   td { 
+    border-width:1px;
+    border-style:solid; 
+    border-color:red;
+    width:50%;
+    }

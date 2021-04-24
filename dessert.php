@@ -21,7 +21,7 @@
              // Récupération des recettes 
               $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes where Nomcategorie = 'Dessert' ";      
                
-              //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
+             
               
               $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
             // affichage chaque recettes
