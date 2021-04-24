@@ -1,8 +1,12 @@
+<?php session_start();?>
 <!DOCTYPE html>
     <html lang="en">
 
 
-        <?php include_once("./entete.html")?>
+     
+
+
+        <?php include_once("./entete.php");?>
         <h1><?php 
                 $_error = $_GET["error"] ;
                 if ($_error==="pass_word"){

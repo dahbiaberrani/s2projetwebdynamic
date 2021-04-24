@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     include_once("./libDataBase.php");
     $connexion =  my_connect();
 
@@ -6,7 +7,7 @@
     {
         $email = htmlspecialchars($_POST['email']);
         $passworde = htmlspecialchars($_POST['password']);
-        $requette = "SELECT   password FROM Utilisateurs WHERE email = \"".$email."\"";
+        $requette = "SELECT  pseudo, password FROM Utilisateurs WHERE email = \"".$email."\"";
         $resultat = mysqli_query($connexion,$requette);
         $user = mysqli_fetch_object ($resultat);
 
@@ -15,11 +16,9 @@
         {
             require("./password.php");
                 if(password_verify($passworde,$user->password ))
-                {
-                    session_start();
-                    $_SESSION['user'] = $_POST['email'];
-                    header('Location: ./index.php');
-                   
+                {                  
+                    $_SESSION["user"] = $user->pseudo;
+                    header('Location: ./index.php?utilisateur='.$_SESSION["user"]);                 
                     exit();
                 }else{ 
                     header('Location: ./connexion.php?error=pass_word');                    

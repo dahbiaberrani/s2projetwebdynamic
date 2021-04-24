@@ -1,4 +1,4 @@
-
+<?php session_start();?>
 <meta charset="utf-8" />
 <title>recettes étudiants </title>
 <link rel="stylesheet" type="text/css"  href="./style/style.css" media="all">
@@ -36,7 +36,18 @@
               </li>
   
               <li>
-                 <a href="./connexion.php">connexion</a>
+                 
+              <?php 
+                
+                 
+                 if (!isset($_SESSION["user"])){
+                     echo "<a href=\"./connexion.php\">connexion</a>";
+                 }
+                  else{
+                     echo "<a href=\"./deconnexion.php\">deconnexion</a>";
+                  }
+                  
+               ?>
               </li>
         
         </ul>

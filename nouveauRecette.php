@@ -3,11 +3,7 @@
     include_once('./libDataBase.php') ;
             //connexion à la base de donnees 
             $connexion= my_connect();
-            if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-                echo("Désolé, accès à la base  impossible\n");
-                exit();
-            }
-            mysqli_set_charset($connexion, "utf8");
+
 
 
    /**
@@ -50,7 +46,7 @@
     <body>
         <h2>Ajouter des nouveau recettes</h2></br>
         <div id="formilaire_ajout">
-            <form action="nouveauRecette.php" method="POST">
+            <form action="./nouveauRecette.php" method="POST">
                 <!-- Nom recette -->
                 <div id="nom_recette">
                     <label for="NomRecette">Nom Recette</label>
