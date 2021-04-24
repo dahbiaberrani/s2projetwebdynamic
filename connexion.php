@@ -1,17 +1,6 @@
 <?php 
-    session_start();
-    $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
-    if (!$connexion){
-        echo ("désolé,connexion au serveur impossible\n");
-        exit;
-    }
-
-    //selection de la base donnees
-
-    if (!mysqli_select_db($connexion,'20_L2M_dahbia_berrani_eps_haddad')) {
-        echo("Désolé, accès à la base  impossible\n");
-        exit;
-    }
+    include_once("./libDataBase.php")
+    $connexion =  my_connect();
 
     if(!empty($_POST['email']) && !empty($_POST['password']))
     {
@@ -27,6 +16,7 @@
             require("./password.php");
                 if(password_verify($passworde,$user->password ))
                 {
+                    session_start();
                     $_SESSION['user'] = $_POST['email'];
                     header('Location: index.html');
                    
@@ -37,6 +27,6 @@
                  }
           
         }else{
-            echo"compte ne exite pas ";
+            echo"le compte n'exite pas ";
          }
     }
