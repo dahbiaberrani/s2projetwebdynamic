@@ -36,17 +36,17 @@
         }
         if  ( $res === "*"){
             echo"Ces recettes peuvent t'intéresser :";
-            affichertout_prix($cout ) ;
+            afficherTout_prix($cout ) ;
     
         }elseif  ($res === "entre"){
             echo"Ces recettes peuvent t'intéresser :";
             afficherEntre_prix($cout );    
         }elseif  ($res === "dessert"){
             echo"Ces recettes peuvent t'intéresser :";
-            affichedessert_prix($cout );
+            afficherDessert_prix($cout );
         }elseif  ($res === "plat"){
             echo"Ces recettes peuvent t'intéresser :";
-            afficheplat_prix($cout);
+            afficherPlat_prix($cout);
         }
     }
 
