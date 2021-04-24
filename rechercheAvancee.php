@@ -5,7 +5,7 @@
 </head>
  <body>
     <?php include("entete.html");?>
-  <form action="resultatRecherche.php" method="GET">
+  <form action="./resultatRecherche.php" method="GET">
    <label  for = 'categorie'>Sélectionner un catégorie: </label>
 	<select  id="categorie" name ="categorie">
 		<option value=" ">  </option>
@@ -20,8 +20,8 @@
 	<select  id="cout" name ="cout">
 		<option value="*"> </option>	
 		<option value="moins_3">moins 3€ </option>
-		<option value="moins_cher"> moins 5 € </option>
-		<option value="moyen_cher"> moins 10€</option>
+		<option value="moins_5"> moins 5 € </option>
+		<option value="moyen_10"> moins 10€</option>
 	</select>
 	
 	 
