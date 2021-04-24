@@ -1,32 +1,9 @@
-  <!DOCTYPE html lang="fr">
-  <html>
-
-  <head>
-      <meta charset="utf-8" />
-      <title>Mon site </title>
-  </head>
-  <header>
-
-      <!-- Le menu -->
-
-      <?php include("entete.php"); ?>
-
-      <!-- Le corps -->
-  </header>
-
-  <body>
-      <p>Ces recettes peuvent t'intéresser :</p>
-
-
-      <?php 
+<?php 
+    include 'libDataBase.php';
+    function afficherEntre(){
         // Connexion à la base de données
-             
-	                $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
-        
-                    if (!$connexion) {
-                        echo("Desolé, connexion au serveur impossible\n");
-                        exit;
-                      }
+     
+        $connexion= my_connect();
 
 
                     //selection de la base donnees
@@ -37,14 +14,14 @@
                     }
                     mysqli_set_charset($connexion, "utf8");
              // Récupération des recettes 
-              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes  ";      
+              $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne FROM Recettes where Nomcategorie = 'Entree' ";      
                
               //$requette2="SELECT Quantitee FROM Compositions Where Idrecette=1";
               
               $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
             // affichage chaque recettes
             if($table_recette_resultat){
-                echo ("Bienvenue sur mon site ");
+               
 
                 while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
                     echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne</h4>");
@@ -93,17 +70,9 @@
 
 
 
-
-           
-            mysqli_close($connexion);
-
-
-        ?>
+        }
         
-      <?php include("pied_de_page.php");?>
-  </body>
-
-  </html>
-
-
-  
+      
+           
+        mysqli_close($connexion);
+?>
