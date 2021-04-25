@@ -16,7 +16,7 @@
               <a href="./resultatRecherche.php?categorie=*&cout=*">tout</a>
            </li>
               <li>
-                 <a href="./resultatRecherche.php?categorie=entre&cout=*">Entres</a>
+                 <a href="./resultatRecherche.php?categorie=entree&cout=*">Entres</a>
               </li>
               <li>
                  <a href="./resultatRecherche.php?categorie=plat&cout=*">Plats</a>

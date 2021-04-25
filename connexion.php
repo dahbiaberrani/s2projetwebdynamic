@@ -7,7 +7,7 @@
 
 
         <?php include_once("./entete.php");?>
-        <h1><?php 
+        <h1 id="headererror"><?php 
                 $_error = $_GET["error"] ;
                 if ($_error==="pass_word"){
                     echo "mot de pass ou email incorrecte ";

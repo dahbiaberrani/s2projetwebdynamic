@@ -38,6 +38,15 @@ h1{
     width: 60%;
 }
 
+#headerok {
+    color: green;
+    text-align: center;
+}
+
+#headererror {
+    color: red;
+    text-align: center;
+}
 
 footer{
     background-color: rgb(75, 209, 209);;
