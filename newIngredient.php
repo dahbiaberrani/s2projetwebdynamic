@@ -7,7 +7,7 @@
                 <div>
                     <label for="nouv_ingredient">nom ingredient:</label>
                     <input  id="nouvIngredient" name="nouvIngredient" type="text" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['nouvIngredient'];} ?>" > 
-                    <p> veuillier saisir le prix par kg ou par ml ou par unité </p>
+                    <p> veuillier saisir le prix par kilogramme, par litre ou par unité </p>
                     <label for="prix"> prix ingredient:</label>
                     <input  id="prix" name="prix" type="number" step="0.01" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['prix'];} ?>" > 
                 </div> 

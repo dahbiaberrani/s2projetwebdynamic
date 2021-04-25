@@ -4,7 +4,7 @@
 <title>Choix d'une opération sur 2 nombres</title>
 </head>
  <body>
-    <?php include("entete.html");?>
+    <?php include("./entete.php");?>
   <form action="./resultatRecherche.php" method="GET">
    <label  for = 'categorie'>Sélectionner un catégorie: </label>
 	<select  id="categorie" name ="categorie">
@@ -30,6 +30,7 @@
 	<input value="Selectionner" type="submit"/> 
 	
    </form>
+   <?php include_once("./pied_de_page.html")?>
  </body>
 
 </html>

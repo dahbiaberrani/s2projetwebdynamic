@@ -1,7 +1,7 @@
 
 
 <?php 
-     include_once("entete.html");
+     include_once("entete.php");
      // Connexion à la base de données
              
      $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');

@@ -1,7 +1,10 @@
+<html>
+<?php include_once("./entete.php");?>
+<body>
 <?php 
     
       
-    include_once("./entete.html"); 
+    
     include_once("./libRecherche.php");
      
 
@@ -50,5 +53,9 @@
         }
     }
 
+ include_once("./pied_de_page.html");
+
     
 ?>
+</body>
+</html>
