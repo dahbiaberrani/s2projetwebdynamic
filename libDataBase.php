@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     //connexion à la base de donnees 
     function my_connect(){
         $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
@@ -22,46 +23,35 @@
     // recupère le nom Idingredient 
     function getIngredientNameById($_idIngredient){
         $connexion= my_connect();
-
         $requette=("SELECT  Idingredient, Nomingredient From Ingredients where Idingredient = $_idIngredient");      
         $resultat =  mysqli_query($connexion,$requette);
-        if($resultat){
-            
+        if($resultat){    
             while($ligne=mysqli_fetch_object($resultat)){
-
                 return ($ligne->Nomingredient);
             }
         }
-
-
     }      
 
     // calcule cout des ingredient :  
     function calculCout($_ingredientArray,$_unitArray){
         $connexion= my_connect();
-
         $_cout_recette = 0;
-        foreach( $_ingredientArray  as $id_ingredient=>$quantite ) { 
-            
+        foreach( $_ingredientArray  as $id_ingredient=>$quantite ) {      
             $requette=("SELECT  Prix  From   Ingredients where Idingredient = $id_ingredient");
             $resultat=  mysqli_query($connexion,$requette);
-            if($resultat){
-            
+            if($resultat){  
                 $ligne=mysqli_fetch_object($resultat);
-        
                 $_prix_unitaire = $ligne->Prix;
             }
-        
             if($_unitArray[ $id_ingredient] === "unite"){
                 $_prix =  $_prix_unitaire * $quantite;
-            }else{
-                $_prix = $_prix_unitaire * $quantite / 1000;
             }
-            
+            else{
+                $_prix = $_prix_unitaire * $quantite / 1000;
+            }        
             $_cout_recette += $_prix;
         } 
         return $_cout_recette;
-
     }
    
     //fonction qui affiche les ingredients  d'une recette qui a un idrecette $_idRecette
@@ -101,6 +91,24 @@
         mysqli_close($connexion);
     }
 
+    //fonction qui affiche les boutons de contrôl de la recette selon le type de connexion (administrateur ou simple utilisateur)
+    function afficherControlRecetteAdmin($_idRecette){
+        if ($_SESSION["user"] === "admin" ){
+
+            //Ajout du bouton suppprimer
+            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            echo "<button type=\"submit\">supprimer</button>";
+            echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
+            echo "</form>";
+
+            //Ajout du boutton modifier
+            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            echo "<button type=\"submit\">modifier</button>";
+            echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
+            echo "</form>";         
+        }
+    }
+
     //fonction qui affiche une recette qui a un idrecette $_idRecette
     function afficherRecette($_idRecette){
         $connexion= my_connect();
@@ -110,17 +118,97 @@
         // affichage chaque recettes
         if($table_recette_resultat){
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
-            echo ("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+            echo ("<div id=\"recette\">");
+            afficherControlRecetteAdmin($_idRecette);
+            echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
             afficherIngredients($_idRecette);     
             // affichage des Etapes recettes    
-            echo"<p>".$ligne_recette->Etapes."</p>";
+            echo "<p>".$ligne_recette->Etapes."</p>";
             //affichage chaque Commentaires 
-            afficherCommentaires($_idRecette);    
+            afficherCommentaires($_idRecette);   
+            echo "</div>"; 
         }
         else{
             echo "<p>Erreur dans l'exécution de la requette</p>";
             echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime un commentaire 
+    function supprimerCommentaire($_idCommentaire){
+        $connexion= my_connect();
+        $requette_commentaire="DELETE FROM Commentaires where Idcommentaire = $_idCommentaire";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if(!$table_commentaire_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime tout les commentaires d'une recette
+    function supprimerToutCommentaires($_idRecette){
+        // recherche de tout les commentaires de la recette
+        $connexion= my_connect();
+        $requette_commentaire="SELECT Idcommentaire FROM Commentaires where Idrecette = $_idRecette";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if($table_commentaire_resultat){      
+            while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
+                supprimerCommentaire($ligne_commentaire->Idcommentaire);
+            }
+        }
+        else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
+
+     // fonction qui supprime un ingrédient d'une recette 
+     function supprimerIngredient($_idIngredient,$_idRecette){
+        $connexion= my_connect();
+        $requette_compositions="DELETE FROM Compositions where Idingredient = $_idIngredient and Idrecette = $_idRecette";
+        $table_compositions_resultat =  mysqli_query($connexion,$requette_compositions);   
+        if(!$table_compositions_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime tout les ingrédients d'une recette
+    function supprimerToutIngredients($_idRecette){
+        // recherche de tout les commentaires de la recette
+        $connexion= my_connect();
+        $requette_compositions="SELECT Idingredient FROM Compositions where Idrecette = $_idRecette";
+        $table_compositions_resultat =  mysqli_query($connexion,$requette_compositions);   
+        if($table_compositions_resultat){      
+            while($ligne_compositions=mysqli_fetch_object($table_compositions_resultat)){
+                supprimerIngredient($ligne_compositions->Idingredient,$_idRecette);
+            }
+        }
+        else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime une recette de la base de donnees 
+    function supprimerRecette($_idRecette){
+        // suppression de tout les commentaires de la recette
+        supprimerToutCommentaires($_idRecette);
+        // suppression des ingrédients de la recette
+        supprimerToutIngredients($_idRecette);
+        // suppression de la recette
+        $connexion= my_connect();
+        $requette_recettes="DELETE FROM Recettes where Idrecette = $_idRecette";
+        $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+        if(!$table_recettes_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
         }
         mysqli_close($connexion);
     }

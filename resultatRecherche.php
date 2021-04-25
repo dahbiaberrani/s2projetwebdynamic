@@ -1,5 +1,8 @@
+<?php
+    session_start();
+    include_once("./entete.php");
+ ?>
 <html>
-<?php include_once("./entete.php");?>
 <body>
 <?php 
     
@@ -10,6 +13,9 @@
 
     $res = $_GET['categorie'];
     $res_cout = $_GET['cout'];
+    $_SESSION["categorie"] = $res;
+    $_SESSION["cout"] = $res_cout;
+
     // afichage des recettes par catégorie 
     if ($res_cout === "*"){
 
@@ -43,7 +49,7 @@
     
         }elseif  ($res === "entre"){
             echo"Ces recettes peuvent t'intéresser :";
-            afficherEntre_prix($cout );    
+            afficherEntre_prix($cout);    
         }elseif  ($res === "dessert"){
             echo"Ces recettes peuvent t'intéresser :";
             afficherDessert_prix($cout );
