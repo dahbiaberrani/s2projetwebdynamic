@@ -18,7 +18,7 @@
                 if(password_verify($passworde,$user->password ))
                 {                  
                     $_SESSION["user"] = $user->pseudo;
-                    header('Location: ./index.php?utilisateur='.$_SESSION["user"]);                 
+                    header('Location: ./index.php');                 
                     exit();
                 }else{ 
                     header('Location: ./connexion.php?error=pass_word');                    

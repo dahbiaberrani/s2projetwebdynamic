@@ -1,4 +1,5 @@
 <?php 
+    session_start();
     //connexion à la base de donnees 
     function my_connect(){
         $connexion=mysqli_connect('mi-mariadb.univ-tlse2.fr','dahbia.berrani-eps-h','Akbou_2021');
@@ -22,46 +23,35 @@
     // recupère le nom Idingredient 
     function getIngredientNameById($_idIngredient){
         $connexion= my_connect();
-
         $requette=("SELECT  Idingredient, Nomingredient From Ingredients where Idingredient = $_idIngredient");      
         $resultat =  mysqli_query($connexion,$requette);
-        if($resultat){
-            
+        if($resultat){    
             while($ligne=mysqli_fetch_object($resultat)){
-
                 return ($ligne->Nomingredient);
             }
         }
-
-
     }      
 
     // calcule cout des ingredient :  
     function calculCout($_ingredientArray,$_unitArray){
         $connexion= my_connect();
-
         $_cout_recette = 0;
-        foreach( $_ingredientArray  as $id_ingredient=>$quantite ) { 
-            
+        foreach( $_ingredientArray  as $id_ingredient=>$quantite ) {      
             $requette=("SELECT  Prix  From   Ingredients where Idingredient = $id_ingredient");
             $resultat=  mysqli_query($connexion,$requette);
-            if($resultat){
-            
+            if($resultat){  
                 $ligne=mysqli_fetch_object($resultat);
-        
                 $_prix_unitaire = $ligne->Prix;
             }
-        
             if($_unitArray[ $id_ingredient] === "unite"){
                 $_prix =  $_prix_unitaire * $quantite;
-            }else{
-                $_prix = $_prix_unitaire * $quantite / 1000;
             }
-            
+            else{
+                $_prix = $_prix_unitaire * $quantite / 1000;
+            }        
             $_cout_recette += $_prix;
         } 
         return $_cout_recette;
-
     }
    
     //fonction qui affiche les ingredients  d'une recette qui a un idrecette $_idRecette
@@ -101,6 +91,24 @@
         mysqli_close($connexion);
     }
 
+    //fonction qui affiche les boutons de contrôl de la recette selon le type de connexion (administrateur ou simple utilisateur)
+    function afficherControlRecetteAdmin($_idRecette){
+        if ($_SESSION["user"] === "admin" ){
+
+            //Ajout du bouton suppprimer
+            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            echo "<button type=\"submit\">supprimer</button>";
+            echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
+            echo "</form>";
+
+            //Ajout du boutton modifier
+            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            echo "<button type=\"submit\">modifier</button>";
+            echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
+            echo "</form>";         
+        }
+    }
+
     //fonction qui affiche une recette qui a un idrecette $_idRecette
     function afficherRecette($_idRecette){
         $connexion= my_connect();
@@ -110,13 +118,16 @@
         // affichage chaque recettes
         if($table_recette_resultat){
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
-            echo ("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+            echo ("<div id=\"recette\">");
+            afficherControlRecetteAdmin($_idRecette);
+            echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
             afficherIngredients($_idRecette);     
             // affichage des Etapes recettes    
-            echo"<p>".$ligne_recette->Etapes."</p>";
+            echo "<p>".$ligne_recette->Etapes."</p>";
             //affichage chaque Commentaires 
-            afficherCommentaires($_idRecette);    
+            afficherCommentaires($_idRecette);   
+            echo "</div>"; 
         }
         else{
             echo "<p>Erreur dans l'exécution de la requette</p>";
