@@ -105,19 +105,18 @@
     function afficherRecette($_idRecette){
         $connexion= my_connect();
         // Récupération des recettes 
-        $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes where Idrecette = $_idRecette";                  
+        $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout,Nomcategorie FROM Recettes where Idrecette = $_idRecette";                  
         $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
         // affichage chaque recettes
         if($table_recette_resultat){
-            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
-                echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."</h4>");
-                // affichage chaque Ingrediens 
-                afficherIngredients($_idRecette);     
-                // affichage des Etapes recettes    
-                echo"<p>".$ligne_recette->Etapes."</p>";
-                //affichage chaque Commentaires 
-                afficherCommentaires($_idRecette);
-            }
+            $ligne_recette=mysqli_fetch_object($table_recette_resultat);
+            echo ("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+            // affichage chaque Ingrediens 
+            afficherIngredients($_idRecette);     
+            // affichage des Etapes recettes    
+            echo"<p>".$ligne_recette->Etapes."</p>";
+            //affichage chaque Commentaires 
+            afficherCommentaires($_idRecette);    
         }
         else{
             echo "<p>Erreur dans l'exécution de la requette</p>";
