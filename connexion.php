@@ -1,17 +1,16 @@
 <?php session_start();?>
 <!DOCTYPE html>
     <html lang="en">
-
-
-     
-
-
         <?php include_once("./entete.php");?>
         <h1 id="headererror"><?php 
                 $_error = $_GET["error"] ;
                 if ($_error==="pass_word"){
-                    echo "mot de pass ou email incorrecte ";
+                    echo "mot de pass incorrecte ";
                 }
+                if ($_error==="account_not_found"){
+                    echo "compte inexistant, veuillez vous inscrire ";
+                }
+                
         ?></h1>
         <body>
 
