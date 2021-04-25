@@ -35,8 +35,8 @@
 
 
     }      
-    // calcule cout des ingredient :
-    
+
+    // calcule cout des ingredient :  
     function calculCout($_ingredientArray,$_unitArray){
         $connexion= my_connect();
 
@@ -63,74 +63,66 @@
         return $_cout_recette;
 
     }
-
-    // fonction qui chercher des recettes par cout définit:
- 
-    function afficherParCout(){
-        $res_cout = $_GET['cout'];
-        if ($res_cout == "moins_3"){
-            $cout = 3;
-    
-        }elseif ($res_cout == "moins_5"){
-            $cout = 5;
-        }elseif ($res_cout == "moyen_10"){
-            $cout = 10;
-        }
-      
+   
+    //fonction qui affiche les ingredients  d'une recette qui a un idrecette $_idRecette
+    function afficherIngredients($_idRecette){
         $connexion= my_connect();
-      
-        // Récupération des recettes 
-        
-        $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes  where Cout <= $cout ";      
-            
-        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
-        // affichage chaque recettes
-        if($table_recette_resultat){
-            
-
-            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
-                echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne</h4><em>".$ligne->Cout."</em>");
-
-                // __________________________affichage chaque Ingrediens 
-                $requette_composant="SELECT Nomingredient,Quantitee,Unite FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $ligne_recette->Idrecette ";
-                $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
-                if($table_composant_resultat){
-                    echo ("Ingredients: <ul> ");
-                    
-                    while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
-                        echo ("<li>".$ligne_composant->Quantitee."".$ligne_composant->Unite." ".$ligne_composant->Nomingredient."</li>");
-                    }
-                    echo "</ul>";
-                }else{
-                    echo "<p>Erreur dans l'exécution de la requette </p>";
-                    echo"message de mysqli:".mysqli_error($connexion);
-                }
-                // affichage des Etapes recettes    
-                echo"<p>".$ligne_recette->Etapes."</p>";
-
-                // __________________________affichage chaque Commentaires 
-                $requette_commentaire="SELECT Commentaire,Idrecette,Datecommentaire FROM Commentaires where Idrecette = $ligne_recette->Idrecette";
-                $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
-                if($table_commentaire_resultat){
-                    echo ("Commentaires:<ul> ");
-                    
-                    while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
-                        echo ("<li>".htmlspecialchars($ligne_commentaire->Datecommentaire).": ".htmlspecialchars($ligne_commentaire->Commentaire)."</li>");
-                    }
-                    echo "</ul>";
-                }else{
-                    echo "<p>Erreur dans l'exécution de la requette</p>";
-                    echo"message de mysqli:".mysqli_error($connexion);
-                }
+        $requette_composant="SELECT Nomingredient,Quantitee,Unite FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $_idRecette ";
+        $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
+        if($table_composant_resultat){
+            echo ("Ingredients: <ul> ");
+            while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
+                echo ("<li>".$ligne_composant->Quantitee."".$ligne_composant->Unite." ".$ligne_composant->Nomingredient."</li>");
             }
+            echo "</ul>";
         }else{
             echo "<p>Erreur dans l'exécution de la requette</p>";
             echo"message de mysqli:".mysqli_error($connexion);
         }
-
         mysqli_close($connexion);
     }
 
+    // fonction qui affiche les commentaires d'une recette qui a un idrecette $_idRecette 
+    function afficherCommentaires($_idRecette){
+        $connexion= my_connect();
+        $requette_commentaire="SELECT Commentaire,Idrecette,Datecommentaire FROM Commentaires where Idrecette = $_idRecette";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if($table_commentaire_resultat){
+            echo ("Commentaires:<ul> ");
+            
+            while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
+                echo ("<li>".$ligne_commentaire->Datecommentaire.": ".$ligne_commentaire->Commentaire."</li>");
+            }
+            echo "</ul>";
+        }else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
 
-   
+    //fonction qui affiche une recette qui a un idrecette $_idRecette
+    function afficherRecette($_idRecette){
+        $connexion= my_connect();
+        // Récupération des recettes 
+        $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes where Idrecette = $_idRecette";                  
+        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+        // affichage chaque recettes
+        if($table_recette_resultat){
+            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
+                echo ("<h1>".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."</h4>");
+                // affichage chaque Ingrediens 
+                afficherIngredients($_idRecette);     
+                // affichage des Etapes recettes    
+                echo"<p>".$ligne_recette->Etapes."</p>";
+                //affichage chaque Commentaires 
+                afficherCommentaires($_idRecette);
+            }
+        }
+        else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
 ?>
