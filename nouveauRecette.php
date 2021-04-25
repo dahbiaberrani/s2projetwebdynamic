@@ -1,39 +1,17 @@
 <?php  
+    session_start();
 
     include_once('./libDataBase.php') ;
-            //connexion à la base de donnees 
-            $connexion= my_connect();
-
-
-
-   /**
-   * @return bool
-   */
-    function is_session_started(){
-        if ( php_sapi_name() !== 'cli' ) {
-            if ( version_compare(phpversion(), '5.4.0', '>=') ) {
-                return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
-           } else {
-                return session_id() === '' ? FALSE : TRUE;
-            }
-        }
-    
-        return FALSE;
-    }
-
-
-
-    // Ouverture d'une session
-    if ( is_session_started() === FALSE ){
-        session_start();
-    } 
+    //connexion à la base de donnees 
+    $connexion= my_connect();
 
     if (isset($_POST['annuler'])){
-        //Annulation de toutes les variable de session
-        session_destroy(); 
+        //Annulation de toutes les variable de session relatives a l'ajout de recette
+        unset($_SESSION["mes_ingredients"]);
+        unset($_SESSION["uniteMesure"]);
     }
 
-     
+    include_once("./entete.php");    
 ?>
 
 <html>
@@ -107,7 +85,7 @@
                     <!-- selectionner les ingredient de recettes  -->
                     <label for="Idingredient">Nom Ingredient</label>
                     <select  id="Idingredient" name="Idingredient" type="numbre" > 
-                    <option value=" " ></option>
+                    <option value="" ></option>
 
                 <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
                 <?php 
@@ -143,18 +121,18 @@
                     <!-- selctionner unite -->
                     <label for="unite"> unite </label>
                     <select  id="unite" name="unite" type="text" > 
+                    <option value="" name="ml" type="text"></option>
                     <option value="g" name="g" type="text">g</option>
                     <option value="ml" name="ml" type="text">ml</option>
                     <option value="unite" name="sans unite" type="text" >unité</option></select>
+                    <input  type="submit"  value="ajouter l'ingredient" name="ajouter"/>
                 </div>  
 
                 
                 
                 <div>
-                    <input  type="submit"  value="ajouter" name="ajouter"/> 
-                </div>
                              <!-- ajouter un nouvelle ingredient   -->
-                <p><a href="./newIngredient.php" target="_blank">nouveau Ingredient</a></p>
+                <p>Vous ne trouvez pas votre ingrédient?:<a href="./newIngredient.php" target="_blank">Ajouter un nouveau ingrédient</a></p>
 
 
                 <!-- code php pour afficher les ingredient en forme d'un tableau   -->   
@@ -166,7 +144,8 @@
                         $_SESSION["mes_ingredients"] = array() ;
                         $_SESSION["uniteMesure"] = array();
                     }
-                    if (isset($_POST['ajouter'])){
+
+                    if (isset($_POST['ajouter']) && !empty($_POST['unite']) && !empty($_POST['Quantite']) && !empty($_POST['Idingredient'])){
 
                         $idIngredient = $_POST['Idingredient'];
                         $_SESSION["mes_ingredients"]+= array($idIngredient=>$quantite);
@@ -198,6 +177,7 @@
                 </div>
             </form>
         </div>
+        <?php include_once("./pied_de_page.html");?>
     </body>
 
 </html>

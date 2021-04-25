@@ -45,10 +45,23 @@
                  }
                   else{
                      echo "<a href=\"./deconnexion.php\">deconnexion</a>";
+
                   }
                   
                ?>
               </li>
+              
+                 
+              <?php 
+                
+                 
+                 if (isset($_SESSION["user"])){
+                     echo "<li><a href=\"./nouveauRecette.php\">ajouter recette</a></li>";
+                 }
+                  
+                  
+               ?>
+              
         
         </ul>
         </nav>
