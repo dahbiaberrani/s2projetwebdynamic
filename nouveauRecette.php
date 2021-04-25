@@ -151,8 +151,8 @@
                         $_SESSION["mes_ingredients"]+= array($idIngredient=>$quantite);
                         $_SESSION["uniteMesure"] += array($idIngredient=>$unite);
                        
-                        echo "cout de la recette:" .calculCout($_SESSION["mes_ingredients"],$_SESSION["uniteMesure"])."<br>";
-                        echo"ingredient ajouter à la recette: </br> ";
+                        echo "cout de la recette:" .calculCout($_SESSION["mes_ingredients"],$_SESSION["uniteMesure"])."€<br>";
+                        echo"ingrédients de la recette: </br> ";
                         echo"<ul>";
                         foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
                             echo"<li>";
@@ -180,7 +180,7 @@
         <?php include_once("./pied_de_page.html");?>
     </body>
 
-</html>
+
 
 <!-- code php pour envoyée des nouvelle recette sur la base de donnes  -->   
 <?php 
@@ -206,20 +206,22 @@
     
                 VALUES  (\"".$Nomrecette."\",\"".$etapes."\",\"".$categorie."\" ,\"".$NombrePersonne."\" ,\"".$cout_recette."\")");
 
-            $req_Id_recette=(" SELECT MAX(Idrecette) as Nbrecette From Recettes");     
-            $resultat0 =  mysqli_query($connexion,$req_Id_recette);
-            if ($resultat0){
-                $emp = mysqli_fetch_object($resultat0);
-                $Id_recette = $emp-> Nbrecette;
-            }else{
-                echo "<p>Erreur dans l'exécution de la requette</p>";
-                echo"message de mysqli:".mysqli_error($connexion);
-            }
-
             $resultat1 = mysqli_query($connexion,$requette1);
+
+            
                        
             if ($resultat1)  {
-                echo" recette Ajouter";
+                // récuperation de l'id de la recette qui vient d'être crée
+                $req_Id_recette=(" SELECT MAX(Idrecette) as Nbrecette From Recettes") ;     
+                $resultat0 =  mysqli_query($connexion,$req_Id_recette);
+                if ($resultat0){
+                    $emp = mysqli_fetch_object($resultat0);
+                    $Id_recette = $emp-> Nbrecette;
+                }else{
+                    echo "<p>Erreur dans l'exécution de la requette</p>";
+                    echo"message de mysqli:".mysqli_error($connexion);
+                }
+    
 
                 //insertion des ingrédients de la recettes
 
@@ -228,22 +230,24 @@
                             VALUES (\"". $key."\", \"". $Id_recette."\", \"".  $quantite."\", \"".  $_SESSION["uniteMesure"][$key]."\" )";
                     $resultat2 = mysqli_query($connexion,$requette2);
                     
-                    if (!$resultat2)  {
+                    if (!$resultat2) {
                         echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
                         echo"message de mysqli:".mysqli_error($connexion);
                         exit();
                     }
-             }
-          
+                }
+                //Annulation de toutes les variable de session relatives a l'ajout de recette
+                unset($_SESSION["mes_ingredients"]);
+                unset($_SESSION["uniteMesure"]);
+                header('Location: ./index.php');                 
+                exit();
             }else{
                 echo "<p>Erreur dans l'exécution de la requette d'ajout de la recette</p>";
                 echo"message de mysqli:".mysqli_error($connexion);
                 exit();
             }
-
         }
-        
-
-   
     }
 ?>
+
+</html>

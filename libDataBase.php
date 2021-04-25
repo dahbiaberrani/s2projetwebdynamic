@@ -135,4 +135,81 @@
         }
         mysqli_close($connexion);
     }
+
+    // fonction qui supprime un commentaire 
+    function supprimerCommentaire($_idCommentaire){
+        $connexion= my_connect();
+        $requette_commentaire="DELETE FROM Commentaires where Idcommentaire = $_idCommentaire";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if(!$table_commentaire_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime tout les commentaires d'une recette
+    function supprimerToutCommentaires($_idRecette){
+        // recherche de tout les commentaires de la recette
+        $connexion= my_connect();
+        $requette_commentaire="SELECT Idcommentaire FROM Commentaires where Idrecette = $_idRecette";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if($table_commentaire_resultat){      
+            while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
+                supprimerCommentaire($ligne_commentaire->Idcommentaire);
+            }
+        }
+        else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
+
+     // fonction qui supprime un ingrédient d'une recette 
+     function supprimerIngredient($_idIngredient,$_idRecette){
+        $connexion= my_connect();
+        $requette_compositions="DELETE FROM Compositions where Idingredient = $_idIngredient and Idrecette = $_idRecette";
+        $table_compositions_resultat =  mysqli_query($connexion,$requette_compositions);   
+        if(!$table_compositions_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime tout les ingrédients d'une recette
+    function supprimerToutIngredients($_idRecette){
+        // recherche de tout les commentaires de la recette
+        $connexion= my_connect();
+        $requette_compositions="SELECT Idingredient FROM Compositions where Idrecette = $_idRecette";
+        $table_compositions_resultat =  mysqli_query($connexion,$requette_compositions);   
+        if($table_compositions_resultat){      
+            while($ligne_compositions=mysqli_fetch_object($table_compositions_resultat)){
+                supprimerIngredient($ligne_compositions->Idingredient,$_idRecette);
+            }
+        }
+        else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui supprime une recette de la base de donnees 
+    function supprimerRecette($_idRecette){
+        // suppression de tout les commentaires de la recette
+        supprimerToutCommentaires($_idRecette);
+        // suppression des ingrédients de la recette
+        supprimerToutIngredients($_idRecette);
+        // suppression de la recette
+        $connexion= my_connect();
+        $requette_recettes="DELETE FROM Recettes where Idrecette = $_idRecette";
+        $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+        if(!$table_recettes_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
 ?>
