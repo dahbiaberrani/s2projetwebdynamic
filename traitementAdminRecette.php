@@ -9,8 +9,18 @@ if (isset($_GET["supprimer"])){
     exit();
 }
 
+if (isset($_GET["commenter"])){
+    $_idRecette = $_GET["commenter"];
+    $_date = date("Y-m-d");
+    $_commentaire = $_SESSION["user"].":".$_GET["commentaire"];
+    insererCommentaire($_idRecette, $_date, $_commentaire);
+    header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]);                 
+    exit();
+}
+
 if (isset($_GET["modifier"])){
     echo "modification de la recette :".$_GET["modifier"];
+    
 }
 
 ?>

@@ -109,6 +109,23 @@
         }
     }
 
+    //fonctions qui affiche le formulaire pour ajouter un commentaire si un utilisateur est connecté
+    function afficherAjoutCommentaire($_idRecette){
+        if (isset($_SESSION["user"])){
+            
+
+            //Ajout du bouton commenter
+            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            //Ajout de la zone de saisie du commentaire
+            echo "<textarea  name=\"commentaire\" cols=\"150\" rows=\"5\" > </textarea>";
+            echo "<button type=\"submit\">commenter</button>";
+            echo "<input type=\"hidden\"  name=\"commenter\" value=\"".$_idRecette."\">";
+            echo "</form>";
+
+             
+        }
+    }
+
     //fonction qui affiche une recette qui a un idrecette $_idRecette
     function afficherRecette($_idRecette){
         $connexion= my_connect();
@@ -126,7 +143,8 @@
             // affichage des Etapes recettes    
             echo "<p>".$ligne_recette->Etapes."</p>";
             //affichage chaque Commentaires 
-            afficherCommentaires($_idRecette);   
+            afficherCommentaires($_idRecette);  
+            afficherAjoutCommentaire($_idRecette);
             echo "</div>"; 
         }
         else{
@@ -209,6 +227,19 @@
         if(!$table_recettes_resultat){      
             echo "<p>Erreur dans l'exécution de la requette</p>";
             echo"message de mysqli:".mysqli_error($connexion); 
+        }
+        mysqli_close($connexion);
+    }
+
+    // fonction qui insère un commentaire
+    function insererCommentaire($_idRecette, $_date, $_commentaire){
+        $connexion= my_connect();
+        $requette_commentaire="INSERT INTO `Commentaires` (`Idrecette`, `Datecommentaire`, `Commentaire`) 
+        VALUES (\"".$_idRecette."\", \"".$_date."\", \"".$_commentaire."\")";
+        $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+        if(!$table_commentaire_resultat){
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
         }
         mysqli_close($connexion);
     }
