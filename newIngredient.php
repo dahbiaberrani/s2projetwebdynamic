@@ -1,5 +1,6 @@
 <html>
     <head>
+    <?php include("./entete.php");?>
     </head>
     <body>
             <div id="nouv_ingredient">
