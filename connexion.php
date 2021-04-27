@@ -1,17 +1,16 @@
 <?php session_start();?>
 <!DOCTYPE html>
     <html lang="en">
-
-
-     
-
-
         <?php include_once("./entete.php");?>
-        <h1><?php 
+        <h1 id="headererror"><?php 
                 $_error = $_GET["error"] ;
                 if ($_error==="pass_word"){
-                    echo "mot de pass ou email incorrecte ";
+                    echo "mot de pass incorrecte ";
                 }
+                if ($_error==="account_not_found"){
+                    echo "compte inexistant, veuillez vous inscrire ";
+                }
+                
         ?></h1>
         <body>
 
@@ -32,29 +31,7 @@
             </form>
             <p class="text-center"><a href="./inscription.php">Inscription</a></p>
         </div>
-        <style>
-            .login-form {
-                width: 340px;
-                margin: 50px auto;
-            }
-            .login-form form {
-                margin-bottom: 15px;
-                background: #f7f7f7;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-                padding: 30px;
-            }
-            .login-form h2 {
-                margin: 0 0 15px;
-            }
-            .form-control, .btn {
-                min-height: 38px;
-                border-radius: 2px;
-            }
-            .btn {        
-                font-size: 15px;
-                font-weight: bold;
-            }
-        </style>
+        
         <?php include_once("./pied_de_page.html")?>
         </body>
 </html>

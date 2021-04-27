@@ -23,7 +23,7 @@
             echo"Ces recettes peuvent t'intéresser :";
             affichertout() ;
 
-        }elseif  ($res === "entre"){
+        }elseif  ($res === "entree"){
             echo"Ces recettes peuvent t'intéresser :";
             afficherEntre();    
         }elseif  ($res === "dessert"){

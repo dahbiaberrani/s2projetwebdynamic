@@ -10,7 +10,7 @@
 	<select  id="categorie" name ="categorie">
 		<option value="*">Tous catégorie </option>
 		<option value="plat"> Plat principal</option>
-		<option value="entre">Entrée</option>
+		<option value="entree">Entrée</option>
 		<option value="dessert">Dessert</option>
 	</select> 
 	 
