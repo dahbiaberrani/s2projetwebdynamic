@@ -75,10 +75,7 @@
                 exit();
             }
         }
-    }
-    
-
-    
+    } 
     
     //fonction d'annulation de toutes les variable de session relatives a l'ajout de recette
     function unsetRecetteVariables(){

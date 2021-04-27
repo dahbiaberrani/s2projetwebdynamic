@@ -51,6 +51,7 @@
             }        
             $_cout_recette += $_prix;
         } 
+        mysqli_close($connexion);
         return $_cout_recette;
     }
    
@@ -101,8 +102,8 @@
             echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
             echo "</form>";
 
-            //Ajout du boutton modifier
-            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+            //Ajout du boutton modifier (mise à jour)
+            echo "<form action=\"./loadRecette.php\" method=\"GET\">";
             echo "<button type=\"submit\">modifier</button>";
             echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
             echo "</form>";         
@@ -242,5 +243,32 @@
             echo"message de mysqli:".mysqli_error($connexion);
         }
         mysqli_close($connexion);
+    }
+
+    // fonction pour charger une recette afin de la modifier dans un tableau à partir de la base de données
+    function loadRecette($_idRecette){
+        $tableauRecette['idRecette'] = $_idRecette;
+        $tableauRecette['nomRecette'] = "Clafoutis";
+        $tableauRecette['categorieRecette'] = "Entree";
+        $tableauRecette['imageRecette'] = "./images/crepesalee.PNG";
+        $tableauRecette['nombrePersonnesRecette'] =4;
+        $tableauRecette['coutRecette'] = 3.1;
+        $tableauRecette['etapesRecette'] = "etape1,Etape2";
+        $ingedients['1']= array('quantite'=> 200,
+                                'unite'=> 'g',
+                                'nom' => 'Farine'
+                            );
+        $ingedients['2']= array('quantite'=> 150,
+                            'unite'=> 'ml',
+                            'nom' => 'huile'
+                        );
+        $ingedients['3']= array('quantite'=> 4,
+                        'unite'=> 'unité',
+                        'nom' => 'Oeufs'
+                    );
+        $tableauRecette['ingredientsRecette'] = $ingedients;
+        $tableauRecette['commentairesRecette'] = "tableau de commentaires";
+
+        return $tableauRecette;
     }
 ?>
