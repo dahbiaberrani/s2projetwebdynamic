@@ -256,15 +256,15 @@
         $tableauRecette['etapesRecette'] = "etape1,Etape2";
         $ingedients['1']= array('quantite'=> 200,
                                 'unite'=> 'g',
-                                'nom' => 'Farine'
+                                'nom' => 'fromage frais'
                             );
         $ingedients['2']= array('quantite'=> 150,
-                            'unite'=> 'ml',
-                            'nom' => 'huile'
+                            'unite'=> 'unité',
+                            'nom' => 'oaufs'
                         );
         $ingedients['3']= array('quantite'=> 4,
-                        'unite'=> 'unité',
-                        'nom' => 'Oeufs'
+                        'unite'=> 'ml',
+                        'nom' => 'beurre fondu'
                     );
         $tableauRecette['ingredientsRecette'] = $ingedients;
         $tableauRecette['commentairesRecette'] = "tableau de commentaires";

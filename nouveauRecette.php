@@ -109,12 +109,6 @@
 ?>
 
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>formuliare nouveau recette</title>
-    <link rel="stylesheet" type="text/css"  href="./style/style.css" media="all">
-    
-</head>
     <body>
         <h2>Ajout de nouvelles recettes</h2></br>
         <div id="formilaire_ajout">
@@ -165,6 +159,7 @@
                     <label for="NombrePersonne ">Nombre personne </label>
                     <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['NombrePersonne'];} ?>"> 
                 </div>
+                
 
                 <div id="ingredient">
                     <!-- selectionner les ingredient de recettes  -->
@@ -172,23 +167,23 @@
                     <select  id="Idingredient" name="Idingredient" type="numbre" > 
                     <option value="" ></option>
 
-                <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
-                <?php 
-                    
-                    //connexion à la base de donnees 
-                    $connexion= my_connect();
-                    $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
-                    $resultat =  mysqli_query($connexion,$requette2);
-                    if($resultat){ 
-                        while($ligne=mysqli_fetch_object($resultat)){
-                        echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
+                    <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
+                    <?php 
+                        
+                        //connexion à la base de donnees 
+                        $connexion= my_connect();
+                        $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
+                        $resultat =  mysqli_query($connexion,$requette2);
+                        if($resultat){ 
+                            while($ligne=mysqli_fetch_object($resultat)){
+                            echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
+                            }
                         }
-                    }
-                    else{
-                        echo "<p>Erreur dans l'exécution de la requette</p>";
-                        echo"message de mysqli:".mysqli_error($connexion);
-                    }
-                ?>
+                        else{
+                            echo "<p>Erreur dans l'exécution de la requette</p>";
+                            echo"message de mysqli:".mysqli_error($connexion);
+                        }
+                    ?>
                     </select>
                     
                     <!-- ajouter la quantite   -->

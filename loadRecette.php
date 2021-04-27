@@ -61,25 +61,25 @@
                     <!-- selectionner les ingredient de recettes  -->
                     <label for="Idingredient">Nom Ingredient</label>
                     <select  id="Idingredient" name="Idingredient" type="numbre" > 
-                        <option value="" ></option>
+                    <option value="" ></option>
 
-                        <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
-                        <?php 
-                            
-                            //connexion à la base de donnees 
-                            $connexion= my_connect();
-                            $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
-                            $resultat =  mysqli_query($connexion,$requette2);
-                            if($resultat){ 
-                                while($ligne=mysqli_fetch_object($resultat)){
-                                echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
-                                }
+                    <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
+                    <?php 
+                        
+                        //connexion à la base de donnees 
+                        $connexion= my_connect();
+                        $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
+                        $resultat =  mysqli_query($connexion,$requette2);
+                        if($resultat){ 
+                            while($ligne=mysqli_fetch_object($resultat)){
+                            echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
                             }
-                            else{
-                                echo "<p>Erreur dans l'exécution de la requette</p>";
-                                echo"message de mysqli:".mysqli_error($connexion);
-                            }
-                        ?>
+                        }
+                        else{
+                            echo "<p>Erreur dans l'exécution de la requette</p>";
+                            echo"message de mysqli:".mysqli_error($connexion);
+                        }
+                    ?>
                     </select>
                     
                     <!-- ajouter la quantite   -->
@@ -96,34 +96,71 @@
                     <input  type="submit"  value="ajouter l'ingredient" name="ajouter"/>
                 </div>  
 
-                
-                
+
                 <div>
-                <!-- ajouter un nouvelle ingredient   -->
-                <p>Vous ne trouvez pas votre ingrédient?:<a href="./newIngredient.php" target="_blank">Ajouter un nouveau ingrédient</a></p>
-
-
-                <!-- code php pour afficher les ingredient sous forme d'un tableau   -->   
-                <?php 
+                    <!-- ajouter un nouvelle ingredient  qui n'existe pas encore dans la base de données -->
+                    <p>Vous ne trouvez pas votre ingrédient?:<a href="./newIngredient.php" target="_blank">Ajouter un nouveau ingrédient</a></p>
+                </div>
+             
+                <?php
+                
+                    // Calcul et affichage du cût de la recette
                     $_ingerdients = array();
                     $_unites = array();
-                    foreach($_session['recette']['ingredientsRecette'] as $key=>$quantite){
+                    foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
                         $_ingerdients+= array($key=>$_session['recette']['ingredientsRecette'][$key]['quantite']);
                         $_unites += array($key=>$_session['recette']['ingredientsRecette'][$key]['unite']);         
                     }
-
                     echo "cout de la recette:" .calculCout($_ingerdients,$_unites)."€<br>";
-                    echo"ingrédients de la recette: </br> ";
-                    echo"<ul>";
-                    foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
-                        echo"<li>";
-                        // recupérer Nom ingredient 
-                        echo getIngredientNameById($key).":".$quantite."".$_SESSION["uniteMesure"][$key];
-                        echo $_POST['$nouvIngredient'];
-                        echo"</li>";
+
+                    //  Affichage de la liste des ingrédients
+                    echo "ingrdéients de la recette: </br> ";
+                    echo "<ul>";
+                    foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
+                        echo "<div id=\"ingredient\">";
+                            //selectionner les ingredient de recettes "
+                            echo "<label for=\"Idingredient\">Nom Ingredient</label>";
+                            echo "<select  id=\"Idingredient\" name=\"Idingredient\" type=\"numbre\" >";
+
+                            //code php pour recuprée la liste des ingredient  de la base de donnee
+                            //connexion à la base de donnees 
+                            $connexion= my_connect();
+                            $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
+                            $resultat =  mysqli_query($connexion,$requette2);
+                            if($resultat){ 
+                                while($ligne=mysqli_fetch_object($resultat)){
+                                    if($key == $ligne->Idingredient){
+                                        echo ("<option value=\"".$ligne->Idingredient."\"selected=\"selected\">".$ligne->Nomingredient."</option>\n");
+                                    }
+                                    else {
+                                        echo ("<option value=\"".$ligne->Idingredient."\">".$ligne->Nomingredient."</option>\n");
+                                    }                          
+                                }
+                            }
+                            else{
+                                echo "<p>Erreur dans l'exécution de la requette</p>";
+                                echo "message de mysqli:".mysqli_error($connexion);
+                            }
+                                
+                            echo "</select>";
+                            
+                            //ajouter la quantite 
+                            echo "<label for=\"Quantite\">Quantite </label>";
+                            echo "<input  id=\"Quantite\" name=\"Quantite\" type=\"number\" value = 200>";
+
+                            // unite
+                            echo "<label for=\"unite\"> unite </label>";
+                            echo "<select  id=\"unite\" name=\"unite\" type=\"text\">";
+                            echo "<option value=\"\" name=\"ml\" type=\"text\"></option>";
+                            echo "<option value=\"g\" name=\"g\" type=\"text\">g</option>";
+                            echo "<option value=\"ml\" name=\"ml\" type=\"text\">ml</option>";
+                            echo "<option value=\"unite\" name=\"sans unite\" type=\"text\" >unité</option></select>";
+                            echo "<input  type=\"submit\"  value=\"ajouter l'ingredient\" name=\"ajouter\"/>";
+                        echo "</div>";
                     }
-                    echo"</ul>";
+                    echo "</ul>";
                 ?>
+                
                 <div id="etape">
                     <!-- ajouter etapes de prepartion recette  -->
                     <label for="etapes">Etapes de preparation</label></br>
