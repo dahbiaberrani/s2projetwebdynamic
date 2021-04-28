@@ -111,52 +111,27 @@
                         $_ingerdients+= array($key=>$_session['recette']['ingredientsRecette'][$key]['quantite']);
                         $_unites += array($key=>$_session['recette']['ingredientsRecette'][$key]['unite']);         
                     }
-                    echo "cout de la recette:" .calculCout($_ingerdients,$_unites)."€<br>";
+                    echo "cout de la recette: ".calculCout($_ingerdients,$_unites)."€<br>";
 
                     //  Affichage de la liste des ingrédients
                     echo "ingrdéients de la recette: </br> ";
                     echo "<ul>";
                     foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
-                        echo "<div id=\"ingredient\">";
+                        echo "<li>";
                             //selectionner les ingredient de recettes "
-                            echo "<label for=\"Idingredient\">Nom Ingredient</label>";
-                            echo "<select  id=\"Idingredient\" name=\"Idingredient\" type=\"numbre\" >";
-
-                            //code php pour recuprée la liste des ingredient  de la base de donnee
-                            //connexion à la base de donnees 
-                            $connexion= my_connect();
-                            $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
-                            $resultat =  mysqli_query($connexion,$requette2);
-                            if($resultat){ 
-                                while($ligne=mysqli_fetch_object($resultat)){
-                                    if($key == $ligne->Idingredient){
-                                        echo ("<option value=\"".$ligne->Idingredient."\"selected=\"selected\">".$ligne->Nomingredient."</option>\n");
-                                    }
-                                    else {
-                                        echo ("<option value=\"".$ligne->Idingredient."\">".$ligne->Nomingredient."</option>\n");
-                                    }                          
-                                }
-                            }
-                            else{
-                                echo "<p>Erreur dans l'exécution de la requette</p>";
-                                echo "message de mysqli:".mysqli_error($connexion);
-                            }
-                                
-                            echo "</select>";
-                            
+                            var_dump($key);
+                            echo "<label for=\"Idingredient\">Nom Ingredient: ".$_session['recette']['ingredientsRecette'][$key]['nom']."</label>";
                             //ajouter la quantite 
-                            echo "<label for=\"Quantite\">Quantite </label>";
-                            echo "<input  id=\"Quantite\" name=\"Quantite\" type=\"number\" value = 200>";
-
+                            echo "<label for=\"Quantite\">Quantite ".$_session['recette']['ingredientsRecette'][$key]['quantite']."</label>";
                             // unite
-                            echo "<label for=\"unite\"> unite </label>";
-                            echo "<select  id=\"unite\" name=\"unite\" type=\"text\">";
-                            echo "<option value=\"\" name=\"ml\" type=\"text\"></option>";
-                            echo "<option value=\"g\" name=\"g\" type=\"text\">g</option>";
-                            echo "<option value=\"ml\" name=\"ml\" type=\"text\">ml</option>";
-                            echo "<option value=\"unite\" name=\"sans unite\" type=\"text\" >unité</option></select>";
-                            echo "<input  type=\"submit\"  value=\"ajouter l'ingredient\" name=\"ajouter\"/>";
-                        echo "</div>";
+                            echo "<label for=\"unite\"> unite ".$_session['recette']['ingredientsRecette'][$key]['unite']."</label>";
+                            //Ajout du bouton suppprimer
+                            echo "<form action=\"./test.php\" method=\"GET\">";
+                                echo "<input type=\"hidden\"  name=\"idIngredient\" value=\"".$key."\">";
+                                echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
+                                echo "<button type=\"submit\">supprimer</button>";
+                            echo "</form>";
+                        echo "</li>";
                     }
                     echo "</ul>";
                 ?>

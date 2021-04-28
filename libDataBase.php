@@ -95,7 +95,6 @@
     //fonction qui affiche les boutons de contrôl de la recette selon le type de connexion (administrateur ou simple utilisateur)
     function afficherControlRecetteAdmin($_idRecette){
         if ($_SESSION["user"] === "admin" ){
-
             //Ajout du bouton suppprimer
             echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
             echo "<button type=\"submit\">supprimer</button>";
@@ -113,17 +112,13 @@
     //fonctions qui affiche le formulaire pour ajouter un commentaire si un utilisateur est connecté
     function afficherAjoutCommentaire($_idRecette){
         if (isset($_SESSION["user"])){
-            
-
             //Ajout du bouton commenter
             echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
             //Ajout de la zone de saisie du commentaire
             echo "<textarea  name=\"commentaire\" cols=\"150\" rows=\"5\" > </textarea>";
             echo "<button type=\"submit\">commenter</button>";
             echo "<input type=\"hidden\"  name=\"commenter\" value=\"".$_idRecette."\">";
-            echo "</form>";
-
-             
+            echo "</form>";            
         }
     }
 
@@ -259,7 +254,7 @@
                                 'nom' => 'fromage frais'
                             );
         $ingedients['2']= array('quantite'=> 150,
-                            'unite'=> 'unité',
+                            'unite'=> 'unite',
                             'nom' => 'oaufs'
                         );
         $ingedients['3']= array('quantite'=> 4,
