@@ -269,8 +269,8 @@
         $commentaires['3'] = array('textCommentaire' => "Commentaire 3",
                                     'dateCommentaire' => "2021-05-19");
 
-        $tableauRecette['ingredientsRecette'] =  $commentaires;
-        $tableauRecette['commentairesRecette'] = "tableau de commentaires";
+        $tableauRecette['ingredientsRecette'] =  $ingedients;
+        $tableauRecette['commentairesRecette'] = $commentaires;
 
         return $tableauRecette;
     }

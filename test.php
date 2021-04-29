@@ -26,7 +26,12 @@ if (isset ($_GET['addRecetteIngredient'])) {
 
 if (isset ($_GET['deleteIngredient'])) {
     echo "Suppression ingrédient de la recette pour: <br>";
-    echo "ingrédient:".$_GET['idIngredienttoDelete']."</br>";
+    echo "ingrédient:".$_GET['idIngredientToDelete']."</br>";
     echo "recette:".$_GET['idRecette']."</br>";
 }
+
+if (isset ($_GET['deleteComment'])) {
+    echo "Suppression du commentaire:".$_GET['idCommentaireToDelete']."</br>";
+}
+
 ?>
