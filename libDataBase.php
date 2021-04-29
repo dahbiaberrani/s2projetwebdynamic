@@ -261,7 +261,15 @@
                         'unite'=> 'ml',
                         'nom' => 'beurre fondu'
                     );
-        $tableauRecette['ingredientsRecette'] = $ingedients;
+
+        $commentaires['1'] = array('textCommentaire' => "Commentaire 1",
+                                    'dateCommentaire' => "2021-03-16");
+        $commentaires['2'] = array('textCommentaire' => "Commentaire 2",
+                                    'dateCommentaire' => "2021-04-01");
+        $commentaires['3'] = array('textCommentaire' => "Commentaire 3",
+                                    'dateCommentaire' => "2021-05-19");
+
+        $tableauRecette['ingredientsRecette'] =  $commentaires;
         $tableauRecette['commentairesRecette'] = "tableau de commentaires";
 
         return $tableauRecette;

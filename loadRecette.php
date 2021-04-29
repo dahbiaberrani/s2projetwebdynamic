@@ -14,86 +14,95 @@
     
 </head>
     <body>
-        <h2>mise à jour de la recette</h2></br>
-        <div id="formilaire_modification">
-            <form action="./loadRecette.php" method="POST">
+        <h2>mise à jour de la recette : <?php echo $_session['recette']['nomRecette'];?></h2></br>
+        <div id="formulaire_modification">
+                <!-- Image de la recette -->
+                <?php echo "<img src=\"".$_session['recette']['imageRecette']."\">"; ?>
                 <!-- Nom recette -->
                 <div id="nom_recette">
-                    <label for="NomRecette">Nom Recette</label>
-                    <input  id="NomRecette" name="NomRecette" type="text" value="<?php echo $_session['recette']['nomRecette'];?>" > 
-                    
+                    <form action="./test.php" method="GET">
+                        <label for="NomRecette">Nom Recette</label>
+                        <input  id="NomRecette" name="NomRecette" type="text" value="<?php echo $_session['recette']['nomRecette'];?>" > 
+                        <button type="submit" name="changeRecetteName">Confirmez la modification</button>
+                    </form>     
                 </div>
                 <!-- choix Catégorie recette -->
                 <div id="categorie">
-                    <label for="categorie">catégorie:</label> 
-                    <select  id="categorie" name="categorie" type="text"> 
-                        
-                        <!-- code php pour recuprer la liste des catégorie existantes dans la base de donnee  -->   
-                        <?php        
-                            $connexion= my_connect();
-                            $requette1=("SELECT  Nomcategorie From Categories");      
-                            $resultat =  mysqli_query($connexion,$requette1);
-                            if($resultat){                               
-                                while($ligne=mysqli_fetch_object($resultat)){
-                                    if( $_session['recette']['categorieRecette']==$ligne->Nomcategorie){
-                                        echo ("<option value=\"".$ligne->Nomcategorie."\"selected=\"selected\">".$ligne->Nomcategorie ."</option>\n");                                     
+                    <form action="./test.php" method="GET">
+                        <label for="categorie">catégorie:</label> 
+                        <select  id="categorie" name="categorie" type="text"> 
+                            
+                            <!-- code php pour recuprer la liste des catégorie existantes dans la base de donnee  -->   
+                            <?php        
+                                $connexion= my_connect();
+                                $requette1=("SELECT  Nomcategorie From Categories");      
+                                $resultat =  mysqli_query($connexion,$requette1);
+                                if($resultat){                               
+                                    while($ligne=mysqli_fetch_object($resultat)){
+                                        if( $_session['recette']['categorieRecette']==$ligne->Nomcategorie){
+                                            echo ("<option value=\"".$ligne->Nomcategorie."\"selected=\"selected\">".$ligne->Nomcategorie ."</option>\n");                                     
+                                        }
+                                        else{
+                                            echo ("<option value=\"".$ligne->Nomcategorie."\"> ".$ligne->Nomcategorie ."</option>\n");
+                                        }                                    
                                     }
-                                    else{
-                                        echo ("<option value=\"".$ligne->Nomcategorie."\"> ".$ligne->Nomcategorie ."</option>\n");
-                                    }                                    
                                 }
-                            }
-                            else{
-                                echo "<p>Erreur dans l'exécution de la requette</p>";
-                                echo"message de mysqli:".mysqli_error($connexion);
-                            }
-                        ?>
-                    </select></br>
+                                else{
+                                    echo "<p>Erreur dans l'exécution de la requette</p>";
+                                    echo"message de mysqli:".mysqli_error($connexion);
+                                }
+                            ?>
+                        </select>
+                        <button type="submit" name="changeRecetteCategorie">Confirmez la modification</button>
+                    </form>
                 </div>
-
+                <!-- ajouter nombre de personne  -->
                 <div id="nbpersonne">
-                    <!-- ajouter nombre de personne  -->
-                    <label for="NombrePersonne ">Nombre personne </label>
-                    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php echo $_session['recette']['nombrePersonnesRecette'];?>"> 
+                    <form action="./test.php" method="GET">    
+                        <label for="NombrePersonne ">Nombre personne </label>
+                        <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php echo $_session['recette']['nombrePersonnesRecette'];?>"> 
+                        <button type="submit" name="changeRecetteNombrePersonne">Confirmez la modification</button>
+                    </form>
                 </div>
-
+                <!-- Ajouter des ingredients à la recettes  -->
                 <div id="ingredient">
-                    <!-- selectionner les ingredient de recettes  -->
-                    <label for="Idingredient">Nom Ingredient</label>
-                    <select  id="Idingredient" name="Idingredient" type="numbre" > 
-                    <option value="" ></option>
+                    <form action="./test.php" method="GET">
+                        <label for="Idingredient">Nom Ingredient</label>
+                        <select  id="Idingredient" name="Idingredient" type="numbre" > 
+                            <option value="" ></option>
 
-                    <!-- code php pour recuprée la liste des ingredient  de la base de donnee  -->   
-                    <?php 
+                            <!-- code php pour recuprée la liste des ingredients présent dans la base de données  -->   
+                            <?php      
+                                //connexion à la base de donnees 
+                                $connexion= my_connect();
+                                $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
+                                $resultat =  mysqli_query($connexion,$requette2);
+                                if($resultat){ 
+                                    while($ligne=mysqli_fetch_object($resultat)){
+                                    echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
+                                    }
+                                }
+                                else{
+                                    echo "<p>Erreur dans l'exécution de la requette</p>";
+                                    echo"message de mysqli:".mysqli_error($connexion);
+                                }
+                            ?>
+                        </select>
                         
-                        //connexion à la base de donnees 
-                        $connexion= my_connect();
-                        $requette2=("SELECT  Nomingredient,Idingredient From Ingredients");      
-                        $resultat =  mysqli_query($connexion,$requette2);
-                        if($resultat){ 
-                            while($ligne=mysqli_fetch_object($resultat)){
-                            echo ("<option value=\"".$ligne->Idingredient."\">  ".$ligne->Nomingredient . "</option>\n");
-                            }
-                        }
-                        else{
-                            echo "<p>Erreur dans l'exécution de la requette</p>";
-                            echo"message de mysqli:".mysqli_error($connexion);
-                        }
-                    ?>
-                    </select>
-                    
-                    <!-- ajouter la quantite   -->
-                    <label for="Quantite">Quantite </label>
-                    <input  id="Quantite" name="Quantite" type="number" >
+                        <!-- ajouter la quantite   --> 
+                        <label for="Quantite">Quantite </label>
+                        <input  id="Quantite" name="Quantite" type="number" >
 
-                    <!-- selctionner unite -->
-                    <label for="unite"> unite </label>
-                    <select  id="unite" name="unite" type="text" > 
-                    <option value="" name="ml" type="text"></option>
-                    <option value="g" name="g" type="text">g</option>
-                    <option value="ml" name="ml" type="text">ml</option>
-                    <option value="unite" name="sans unite" type="text" >unité</option></select>
-                    <input  type="submit"  value="ajouter l'ingredient" name="ajouter"/>
+                        <!-- selctionner unite -->
+                        <label for="unite"> unite </label>
+                        <select  id="unite" name="unite" type="text" > 
+                            <option value="" name="" type="text"></option>
+                            <option value="g" name="g" type="text">g</option>
+                            <option value="ml" name="ml" type="text">ml</option>
+                            <option value="unite" name="sans unite" type="text" >unité</option>
+                        </select>
+                        <button type="submit" name="addRecetteIngredient">Ajouter l'ingrédient</button>
+                    </form>
                 </div>  
 
 
@@ -114,40 +123,39 @@
                     echo "cout de la recette: ".calculCout($_ingerdients,$_unites)."€<br>";
 
                     //  Affichage de la liste des ingrédients
-                    echo "ingrdéients de la recette: </br> ";
-                    echo "<ul>";
+                    echo "ingrdéients de la recette: <br> ";
+              
                     foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
-                        echo "<li>";
-                            //selectionner les ingredient de recettes "
-                            var_dump($key);
-                            echo "<label for=\"Idingredient\">Nom Ingredient: ".$_session['recette']['ingredientsRecette'][$key]['nom']."</label>";
-                            //ajouter la quantite 
-                            echo "<label for=\"Quantite\">Quantite ".$_session['recette']['ingredientsRecette'][$key]['quantite']."</label>";
-                            // unite
-                            echo "<label for=\"unite\"> unite ".$_session['recette']['ingredientsRecette'][$key]['unite']."</label>";
-                            //Ajout du bouton suppprimer
-                            echo "<form action=\"./test.php\" method=\"GET\">";
-                                echo "<input type=\"hidden\"  name=\"idIngredient\" value=\"".$key."\">";
+                        
+                        echo "<form action=\"./test.php\" method=\"GET\">";
+                            // Affichage de la quantite 
+                            echo $value['quantite'];
+                            //Affichage unité si différente de "unite"
+                            $_Unite = $value['unite'];
+                            if ($_Unite != "unite") {
+                                echo " ".$_Unite;
+                            }
+                            // Affichage du nom de l'ingrédient
+                            echo " ".$value['nom'];              
+                            //Ajout du bouton suppprimer afin de permettre la supression d'un ingrédient dans la recette.
+                            
+                                echo "<input type=\"hidden\"  name=\"idIngredienttoDelete\" value=\"".$key."\">";
                                 echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
-                                echo "<button type=\"submit\">supprimer</button>";
-                            echo "</form>";
-                        echo "</li>";
-                    }
-                    echo "</ul>";
+                                echo "<button type=\"submit\" name=\"deleteIngredient\">supprimer</button>";
+                                
+                            echo "</form>";                 
+                    }               
                 ?>
-                
+                <!-- ajouter etapes de prepartion recette  -->
                 <div id="etape">
-                    <!-- ajouter etapes de prepartion recette  -->
-                    <label for="etapes">Etapes de preparation</label></br>
-                    <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_session['recette']['etapesRecette']; ?></textarea> 
+                    <form action="./test.php" method="GET"> 
+                        <label for="etapes">Etapes de preparation</label></br>
+                        <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_session['recette']['etapesRecette']; ?></textarea>
+                        <button type="submit" name="changeRecetteEtapes">Confirmez la modification</button>
+                    </form>
                 </div>
-
-                <div id="boton_envoie">
-    
-                    <input value="Envoyer" name="Envoyer" type="submit"/> 
-                    <input value="annuler" name="annuler" type="submit"/> 
-                </div>
-            </form>
+                <!-- Permettre l'ajout d'un nouveau commentaire à la recette -->
+                <!-- Affichage des commentaires de la recette pour proposer la suppression -->
         </div>
         <?php include_once("./pied_de_page.html");?>
     </body>
