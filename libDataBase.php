@@ -180,8 +180,8 @@
         mysqli_close($connexion);
     }
 
-     // fonction qui supprime un ingrédient d'une recette 
-     function supprimerIngredient($_idIngredient,$_idRecette){
+    // fonction qui supprime un ingrédient d'une recette 
+    function supprimerIngredient($_idIngredient,$_idRecette){
         $connexion= my_connect();
         $requette_compositions="DELETE FROM Compositions where Idingredient = $_idIngredient and Idrecette = $_idRecette";
         $table_compositions_resultat =  mysqli_query($connexion,$requette_compositions);   
@@ -241,8 +241,7 @@
     }
 
     // fonction pour charger une recette afin de la modifier dans un tableau à partir de la base de données
-    function loadRecette($_idRecette){
-        $tableauRecette['idRecette'] = $_idRecette;
+    function loadRecetteFake($_idRecette){
         $tableauRecette['nomRecette'] = "Clafoutis";
         $tableauRecette['categorieRecette'] = "Entree";
         $tableauRecette['imageRecette'] = "./images/crepesalee.PNG";
@@ -274,4 +273,74 @@
 
         return $tableauRecette;
     }
+
+// fonction pour charger les ingrédients d'une recette dans un tableau
+function loadIngredients($_idRecette){
+    $connexion= my_connect();
+    $requette_composant="SELECT Idingredient, Nomingredient, Quantitee, Unite FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $_idRecette ";
+    $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
+    $ingredients = array();
+    if($table_composant_resultat){
+        while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
+            $ingredients += array($ligne_composant->Idingredient =>array('quantite' =>$ligne_composant->Quantitee, 'unite' =>$ligne_composant->Unite,'nom' =>$ligne_composant->Nomingredient ));
+        }
+    }else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+    return $ingredients;
+}
+
+// Fonction pour charger les commentaires d'une recette dans un tableau
+function loadComments($_idRecette){
+    $connexion= my_connect();
+    $requette_commentaire="SELECT Idcommentaire, Commentaire, Idrecette, Datecommentaire FROM Commentaires where Idrecette = $_idRecette";
+    $table_commentaire_resultat =  mysqli_query($connexion,$requette_commentaire);   
+    $commentaires = array();
+    if($table_commentaire_resultat){ 
+        while($ligne_commentaire=mysqli_fetch_object($table_commentaire_resultat)){
+            $commentaires += array($ligne_commentaire->Idcommentaire => array('textCommentaire' => $ligne_commentaire->Commentaire,'dateCommentaire' => $ligne_commentaire->Datecommentaire));          
+        } 
+    }else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion); 
+    return $commentaires;
+}
+
+// fonction pour charger une recette afin de la modifier dans un tableau à partir de la base de données
+function loadRecette($_idRecette){
+    $connexion= my_connect();
+    // Récupération des informations de la recettes 
+    $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout,Nomcategorie FROM Recettes where Idrecette = $_idRecette";                  
+    $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+    if($table_recette_resultat){
+        $ligne_recette=mysqli_fetch_object($table_recette_resultat);
+
+        // Sauvegarde des inforamtions de la recette dans un tableau
+        $tableauRecette['nomRecette'] = $ligne_recette->Nomrecette;
+        $tableauRecette['categorieRecette'] = $ligne_recette->Nomcategorie;
+        $tableauRecette['imageRecette'] = $ligne_recette->Imagepath;
+        $tableauRecette['nombrePersonnesRecette'] = $ligne_recette->Nombrepersonne;
+        $tableauRecette['etapesRecette'] = $ligne_recette->Etapes;
+      
+        // Chargement des Ingrediens de la recette
+        $ingedients = loadIngredients($_idRecette); 
+        $tableauRecette['ingredientsRecette'] =  $ingedients; 
+
+        // Chargement des Commentaires de la recette
+        $commentaires = loadComments($_idRecette);
+        $tableauRecette['commentairesRecette'] = $commentaires; 
+    }
+    else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+
+    return $tableauRecette;
+}
+
 ?>
