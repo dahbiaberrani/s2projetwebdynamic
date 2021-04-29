@@ -1,5 +1,7 @@
 <?php
+include_once('./libDataBase.php');
 
+// Traitement de la Demande de changement de nom de recette
 if (isset ($_GET['changeRecetteName'])) {
     echo "changement nom recette pour: ".$_GET['NomRecette']."<br>";
 }
@@ -33,5 +35,10 @@ if (isset ($_GET['deleteIngredient'])) {
 if (isset ($_GET['deleteComment'])) {
     echo "Suppression du commentaire:".$_GET['idCommentaireToDelete']."</br>";
 }
+
+// Retour à la page de modificaztion de la recette pour afficher la même recette mais une fois modifiée
+
+header("Location: ./loadRecette.php?modifier=".$_GET['idRecette']);                 
+exit();
 
 ?>

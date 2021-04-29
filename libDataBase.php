@@ -52,7 +52,7 @@
             $_cout_recette += $_prix;
         } 
         mysqli_close($connexion);
-        return $_cout_recette;
+        return round ( $_cout_recette, 2 );
     }
    
     //fonction qui affiche les ingredients  d'une recette qui a un idrecette $_idRecette
@@ -238,40 +238,6 @@
             echo"message de mysqli:".mysqli_error($connexion);
         }
         mysqli_close($connexion);
-    }
-
-    // fonction pour charger une recette afin de la modifier dans un tableau à partir de la base de données
-    function loadRecetteFake($_idRecette){
-        $tableauRecette['nomRecette'] = "Clafoutis";
-        $tableauRecette['categorieRecette'] = "Entree";
-        $tableauRecette['imageRecette'] = "./images/crepesalee.PNG";
-        $tableauRecette['nombrePersonnesRecette'] =4;
-        $tableauRecette['coutRecette'] = 3.1;
-        $tableauRecette['etapesRecette'] = "etape1,Etape2";
-        $ingedients['1']= array('quantite'=> 200,
-                                'unite'=> 'g',
-                                'nom' => 'fromage frais'
-                            );
-        $ingedients['2']= array('quantite'=> 150,
-                            'unite'=> 'unite',
-                            'nom' => 'oaufs'
-                        );
-        $ingedients['3']= array('quantite'=> 4,
-                        'unite'=> 'ml',
-                        'nom' => 'beurre fondu'
-                    );
-
-        $commentaires['1'] = array('textCommentaire' => "Commentaire 1",
-                                    'dateCommentaire' => "2021-03-16");
-        $commentaires['2'] = array('textCommentaire' => "Commentaire 2",
-                                    'dateCommentaire' => "2021-04-01");
-        $commentaires['3'] = array('textCommentaire' => "Commentaire 3",
-                                    'dateCommentaire' => "2021-05-19");
-
-        $tableauRecette['ingredientsRecette'] =  $ingedients;
-        $tableauRecette['commentairesRecette'] = $commentaires;
-
-        return $tableauRecette;
     }
 
 // fonction pour charger les ingrédients d'une recette dans un tableau

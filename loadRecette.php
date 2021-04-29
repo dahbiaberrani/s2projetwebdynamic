@@ -20,15 +20,16 @@
             <?php echo "<img src=\"".$_recette['imageRecette']."\">"; ?>
             <!-- Nom recette -->
             <div id="nom_recette">
-                <form action="./test.php" method="GET">
+                <form action="./traitementModificationRecette.php" method="GET">
                     <label for="NomRecette">Nom Recette</label>
                     <input  id="NomRecette" name="NomRecette" type="text" value="<?php echo $_recette['nomRecette'];?>" > 
+                    <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="changeRecetteName">Confirmez la modification</button>
                 </form>     
             </div>
             <!-- choix Catégorie recette -->
             <div id="categorie">
-                <form action="./test.php" method="GET">
+                <form action="./traitementModificationRecette.php" method="GET">
                     <label for="categorie">catégorie:</label> 
                     <select  id="categorie" name="categorie" type="text"> 
                         
@@ -53,20 +54,22 @@
                             }
                         ?>
                     </select>
+                    <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="changeRecetteCategorie">Confirmez la modification</button>
                 </form>
             </div>
             <!-- ajouter nombre de personne  -->
             <div id="nbpersonne">
-                <form action="./test.php" method="GET">    
+                <form action="./traitementModificationRecette.php" method="GET">    
                     <label for="NombrePersonne ">Nombre personne </label>
                     <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php echo $_recette['nombrePersonnesRecette'];?>"> 
+                    <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="changeRecetteNombrePersonne">Confirmez la modification</button>
                 </form>
             </div>
             <!-- Ajouter des ingredients à la recettes  -->
             <div id="ingredient">
-                <form action="./test.php" method="GET">
+                <form action="./traitementModificationRecette.php" method="GET">
                     <label for="Idingredient">Nom Ingredient</label>
                     <select  id="Idingredient" name="Idingredient" type="numbre" > 
                         <option value="" ></option>
@@ -101,6 +104,7 @@
                         <option value="ml" name="ml" type="text">ml</option>
                         <option value="unite" name="sans unite" type="text" >unité</option>
                     </select>
+                    <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="addRecetteIngredient">Ajouter l'ingrédient</button>
                 </form>
             </div>  
@@ -126,7 +130,7 @@
             
                 foreach($_recette['ingredientsRecette'] as $key=>$value){
                     
-                    echo "<form action=\"./test.php\" method=\"GET\">";
+                    echo "<form action=\"./traitementModificationRecette.php\" method=\"GET\">";
                         // Affichage de la quantite 
                         echo $value['quantite'];
                         //Affichage unité si différente de "unite"
@@ -147,9 +151,10 @@
             ?>
             <!-- ajouter etapes de prepartion recette  -->
             <div id="etape">
-                <form action="./test.php" method="GET"> 
+                <form action="./traitementModificationRecette.php" method="GET"> 
                     <label for="etapes">Etapes de preparation</label></br>
                     <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_recette['etapesRecette']; ?></textarea>
+                    <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="changeRecetteEtapes">Confirmez la modification</button>
                 </form>
             </div>
@@ -161,12 +166,13 @@
                 echo "<ul>";
                     foreach($_recette['commentairesRecette'] as $key=>$value){
                         echo "<li>";
-                            echo "<form action=\"./test.php\" method=\"GET\">";
+                            echo "<form action=\"./traitementModificationRecette.php\" method=\"GET\">";
                                 // Affichage de la date du commentaire
                                 echo $value['dateCommentaire'].":";
                                 // Affichage du text du commentaire
                                 echo " ".$value['textCommentaire']." ";              
                                 //Ajout du bouton suppprimer afin de permettre la supression d'un commentaire.             
+                                echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
                                 echo "<input type=\"hidden\"  name=\"idCommentaireToDelete\" value=\"".$key."\">";
                                 echo "<button type=\"submit\" name=\"deleteComment\">supprimer</button>";                
                             echo "</form>";   
