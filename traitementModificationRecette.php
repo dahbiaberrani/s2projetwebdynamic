@@ -3,19 +3,22 @@ include_once('./libDataBase.php');
 
 // Traitement de la Demande de changement de nom de recette
 if (isset ($_GET['changeRecetteName'])) {
-    echo "changement nom recette pour: ".$_GET['NomRecette']."<br>";
+    updateName($_GET['idRecette'],$_GET['NomRecette']);
 }
 
 if (isset ($_GET['changeRecetteCategorie'])) {
     echo "changement catégorie recette pour: ".$_GET['categorie']."<br>";
+    updateCategorie($_GET['idRecette'],$_GET['categorie']);
 }
 
 if (isset ($_GET['changeRecetteNombrePersonne'])) {
     echo "changement Nombre Personne recette pour: ".$_GET['NombrePersonne']."<br>";
+    updateNombrePersonnes($_GET['idRecette'],$_GET['NombrePersonne']);
 }
 
 if (isset ($_GET['changeRecetteEtapes'])) {
     echo "changement Etapes recette pour: ".$_GET['etapes']."<br>";
+    updateEtapes($_GET['idRecette'],$_GET['etapes']);
 }
 
 if (isset ($_GET['addRecetteIngredient'])) {

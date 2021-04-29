@@ -338,7 +338,66 @@ function updateCout($_idRecette,$_nouveauCout){
         exit();
     }
     mysqli_close($connexion);
+}
 
+// Fonction pour mettre à jour le nom d'une recette
+function updateName($_idRecette,$_nouveauNom){
+
+    $connexion= my_connect();
+    $requette2= " UPDATE Recettes SET Nomrecette =\"".$_nouveauNom."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour mettre à jour la catégorie d'une recette
+function updateCategorie($_idRecette,$_nouvelleCategorie){
+
+    $connexion= my_connect();
+    $requette2= " UPDATE Recettes SET Nomcategorie =\"".$_nouvelleCategorie."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour mettre à jour le nombre de personnes d'une recette
+function updateNombrePersonnes($_idRecette,$_nouveauNombre){
+
+    $connexion= my_connect();
+    $requette2= " UPDATE Recettes SET Nombrepersonne =\"".$_nouveauNombre."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour mettre à jour le nombre de personnes d'une recette
+function updateEtapes($_idRecette,$_nouvellesEtapes){
+
+    $connexion= my_connect();
+    $requette2= " UPDATE Recettes SET Etapes =\"".$_nouvellesEtapes."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
 }
 
 ?>
