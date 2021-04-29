@@ -3,8 +3,8 @@
     include_once("./libDataBase.php");
     $_idRecette = $_GET["modifier"];
     echo "modification de la recette :".$_idRecette."</br>";
-    $_session['recette'] = loadRecette($_idRecette);
-    var_dump($_session['recette']);
+    $_recette = loadRecette($_idRecette);
+    var_dump($_recette);
 ?>
 <html>
 <head>
@@ -14,15 +14,15 @@
     
 </head>
     <body>
-        <h2>mise à jour de la recette : <?php echo $_session['recette']['nomRecette'];?></h2></br>
+        <h2>mise à jour de la recette : <?php echo $_recette['nomRecette'];?></h2></br>
         <div id="formulaire_modification">
             <!-- Image de la recette -->
-            <?php echo "<img src=\"".$_session['recette']['imageRecette']."\">"; ?>
+            <?php echo "<img src=\"".$_recette['imageRecette']."\">"; ?>
             <!-- Nom recette -->
             <div id="nom_recette">
                 <form action="./test.php" method="GET">
                     <label for="NomRecette">Nom Recette</label>
-                    <input  id="NomRecette" name="NomRecette" type="text" value="<?php echo $_session['recette']['nomRecette'];?>" > 
+                    <input  id="NomRecette" name="NomRecette" type="text" value="<?php echo $_recette['nomRecette'];?>" > 
                     <button type="submit" name="changeRecetteName">Confirmez la modification</button>
                 </form>     
             </div>
@@ -39,7 +39,7 @@
                             $resultat =  mysqli_query($connexion,$requette1);
                             if($resultat){                               
                                 while($ligne=mysqli_fetch_object($resultat)){
-                                    if( $_session['recette']['categorieRecette']==$ligne->Nomcategorie){
+                                    if( $_recette['categorieRecette']==$ligne->Nomcategorie){
                                         echo ("<option value=\"".$ligne->Nomcategorie."\"selected=\"selected\">".$ligne->Nomcategorie ."</option>\n");                                     
                                     }
                                     else{
@@ -60,7 +60,7 @@
             <div id="nbpersonne">
                 <form action="./test.php" method="GET">    
                     <label for="NombrePersonne ">Nombre personne </label>
-                    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php echo $_session['recette']['nombrePersonnesRecette'];?>"> 
+                    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php echo $_recette['nombrePersonnesRecette'];?>"> 
                     <button type="submit" name="changeRecetteNombrePersonne">Confirmez la modification</button>
                 </form>
             </div>
@@ -115,16 +115,16 @@
                 // Calcul et affichage du coût de la recette
                 $_ingerdients = array();
                 $_unites = array();
-                foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
-                    $_ingerdients+= array($key=>$_session['recette']['ingredientsRecette'][$key]['quantite']);
-                    $_unites += array($key=>$_session['recette']['ingredientsRecette'][$key]['unite']);         
+                foreach($_recette['ingredientsRecette'] as $key=>$value){
+                    $_ingerdients+= array($key=>$_recette['ingredientsRecette'][$key]['quantite']);
+                    $_unites += array($key=>$_recette['ingredientsRecette'][$key]['unite']);         
                 }
                 echo "cout de la recette: ".calculCout($_ingerdients,$_unites)."€<br>";
 
                 //  Affichage de la liste des ingrédients
                 echo "ingrdéients de la recette: <br> ";
             
-                foreach($_session['recette']['ingredientsRecette'] as $key=>$value){
+                foreach($_recette['ingredientsRecette'] as $key=>$value){
                     
                     echo "<form action=\"./test.php\" method=\"GET\">";
                         // Affichage de la quantite 
@@ -149,7 +149,7 @@
             <div id="etape">
                 <form action="./test.php" method="GET"> 
                     <label for="etapes">Etapes de preparation</label></br>
-                    <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_session['recette']['etapesRecette']; ?></textarea>
+                    <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_recette['etapesRecette']; ?></textarea>
                     <button type="submit" name="changeRecetteEtapes">Confirmez la modification</button>
                 </form>
             </div>
@@ -159,7 +159,7 @@
                 //  Affichage de la liste des ingrédients
                 echo "Commentaires de la recette: <br> ";
                 echo "<ul>";
-                    foreach($_session['recette']['commentairesRecette'] as $key=>$value){
+                    foreach($_recette['commentairesRecette'] as $key=>$value){
                         echo "<li>";
                             echo "<form action=\"./test.php\" method=\"GET\">";
                                 // Affichage de la date du commentaire
