@@ -103,7 +103,8 @@
                         <option value="g" name="g" type="text">g</option>
                         <option value="ml" name="ml" type="text">ml</option>
                         <option value="unite" name="sans unite" type="text" >unité</option>
-                    </select>
+                    </select>             
+                    <input type="hidden"  name="cout" value="<?php echo $_recette['cout'];?>">
                     <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="addRecetteIngredient">Ajouter l'ingrédient</button>
                 </form>
@@ -123,7 +124,7 @@
                     $_ingerdients+= array($key=>$_recette['ingredientsRecette'][$key]['quantite']);
                     $_unites += array($key=>$_recette['ingredientsRecette'][$key]['unite']);         
                 }
-                echo "cout de la recette: ".calculCout($_ingerdients,$_unites)."€<br>";
+                echo "coût de la recette: ".$_recette['cout']."€<br>";
 
                 //  Affichage de la liste des ingrédients
                 echo "ingrdéients de la recette: <br> ";
@@ -143,7 +144,10 @@
                         //Ajout du bouton suppprimer afin de permettre la supression d'un ingrédient dans la recette.
                         
                             echo "<input type=\"hidden\"  name=\"idIngredientToDelete\" value=\"".$key."\">";
+                            echo "<input type=\"hidden\"  name=\"quantiteToDelete\" value=\"".$value['quantite']."\">";
+                            echo "<input type=\"hidden\"  name=\"unitToDelete\" value=\"".$_Unite."\">";
                             echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
+                            echo "<input type=\"hidden\"  name=\"cout\" value=\"".$_recette['cout']."\">";
                             echo "<button type=\"submit\" name=\"deleteIngredient\">supprimer</button>";
                             
                         echo "</form>";                 

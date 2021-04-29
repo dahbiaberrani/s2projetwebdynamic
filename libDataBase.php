@@ -291,6 +291,7 @@ function loadRecette($_idRecette){
         $tableauRecette['imageRecette'] = $ligne_recette->Imagepath;
         $tableauRecette['nombrePersonnesRecette'] = $ligne_recette->Nombrepersonne;
         $tableauRecette['etapesRecette'] = $ligne_recette->Etapes;
+        $tableauRecette['cout'] = $ligne_recette->Cout;
       
         // Chargement des Ingrediens de la recette
         $ingedients = loadIngredients($_idRecette); 
@@ -307,6 +308,37 @@ function loadRecette($_idRecette){
     mysqli_close($connexion);
 
     return $tableauRecette;
+}
+
+// Fonction pour rajouter un ingrédient à la composition d'une recette
+function addComposition($_Idingredient, $_Idrecette, $_quantitee, $_uniteMesure){
+    $connexion= my_connect();
+    $requette2= "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
+                            VALUES (\"". $_Idingredient."\", \"". $_Idrecette."\", \"".$_quantitee."\", \"".$_uniteMesure."\" )";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour mettre à jour le coût d'un recette
+function updateCout($_idRecette,$_nouveauCout){
+
+    $connexion= my_connect();
+    $requette2= " UPDATE Recettes SET Cout =\"".$_nouveauCout."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $resultat2 = mysqli_query($connexion,$requette2);
+    
+    if (!$resultat2) {
+        echo "<p>Erreur dans l'exécution de la requette d'ajout d'ingredient dans la composition'</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        exit();
+    }
+    mysqli_close($connexion);
+
 }
 
 ?>

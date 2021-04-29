@@ -19,20 +19,40 @@ if (isset ($_GET['changeRecetteEtapes'])) {
 }
 
 if (isset ($_GET['addRecetteIngredient'])) {
-    echo "Ajout ingrédients à la recette pour: <br>";
-    echo "idIngrédient:".$_GET['Idingredient']."</br>";
-    echo "qauntité:".$_GET['Quantite']."</br>";
-    echo "unité:".$_GET['unite']."</br>";
+
+    //Vérification que l'ingrédient est bien renseigné
+
+    // Vérification que le nouveau ingrédient n'existe pas
+    addComposition($_GET['Idingredient'], $_GET['idRecette'], $_GET['Quantite'], $_GET['unite']);
+    // mise à jour du cout de la recette 
+    // calcul du cout de l'ingrégient ajouté
+    $_ingredientArray = array($_GET['Idingredient']=>$_GET['Quantite']);
+    $_unitArray = array($_GET['Idingredient']=>$_GET['unite']);
+    $coutAAjouter = calculCout($_ingredientArray,$_unitArray);
+    $_nouveauCout = $_GET['cout'] + $coutAAjouter;
+
+    // Mise à jout de la base de données
+    updateCout($_GET['idRecette'],$_nouveauCout);
 }
 
 
 if (isset ($_GET['deleteIngredient'])) {
-    echo "Suppression ingrédient de la recette pour: <br>";
-    echo "ingrédient:".$_GET['idIngredientToDelete']."</br>";
-    echo "recette:".$_GET['idRecette']."</br>";
+    supprimerIngredient($_GET['idIngredientToDelete'],$_GET['idRecette']);
+
+    // mise à jour du cout de la recette 
+    // calcul du cout de l'ingrégient supprimé
+
+    $_ingredientArray = array($_GET['idIngredientToDelete']=>$_GET['quantiteToDelete']);
+    $_unitArray = array($_GET['idIngredientToDelete']=>$_GET['unitToDelete']);
+    $coutAEnlever = calculCout($_ingredientArray,$_unitArray);
+    $_nouveauCout = $_GET['cout'] - $coutAEnlever;
+
+    // Mise à jout de la base de données
+    updateCout($_GET['idRecette'],$_nouveauCout);
 }
 
 if (isset ($_GET['deleteComment'])) {
+    supprimerCommentaire($_GET['idCommentaireToDelete']);
     echo "Suppression du commentaire:".$_GET['idCommentaireToDelete']."</br>";
 }
 
