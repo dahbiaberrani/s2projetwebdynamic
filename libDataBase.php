@@ -312,8 +312,8 @@ function loadRecette($_idRecette){
 
 // Fonction pour rajouter un ingrédient à la composition d'une recette
 function addComposition($_Idingredient, $_Idrecette, $_quantitee, $_uniteMesure){
-    $connexion= my_connect();
-    $requette2= "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
+    $connexion = my_connect();
+    $requette2 = "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
                             VALUES (\"". $_Idingredient."\", \"". $_Idrecette."\", \"".$_quantitee."\", \"".$_uniteMesure."\" )";
     $resultat2 = mysqli_query($connexion,$requette2);
     
@@ -328,8 +328,8 @@ function addComposition($_Idingredient, $_Idrecette, $_quantitee, $_uniteMesure)
 // Fonction pour mettre à jour le coût d'un recette
 function updateCout($_idRecette,$_nouveauCout){
 
-    $connexion= my_connect();
-    $requette2= " UPDATE Recettes SET Cout =\"".$_nouveauCout."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $connexion = my_connect();
+    $requette2 = " UPDATE Recettes SET Cout =\"".$_nouveauCout."\" WHERE Idrecette = \"".$_idRecette."\"";
     $resultat2 = mysqli_query($connexion,$requette2);
     
     if (!$resultat2) {
@@ -343,8 +343,8 @@ function updateCout($_idRecette,$_nouveauCout){
 // Fonction pour mettre à jour le nom d'une recette
 function updateName($_idRecette,$_nouveauNom){
 
-    $connexion= my_connect();
-    $requette2= " UPDATE Recettes SET Nomrecette =\"".$_nouveauNom."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $connexion = my_connect();
+    $requette2 = " UPDATE Recettes SET Nomrecette =\"".$_nouveauNom."\" WHERE Idrecette = \"".$_idRecette."\"";
     $resultat2 = mysqli_query($connexion,$requette2);
     
     if (!$resultat2) {
@@ -358,8 +358,8 @@ function updateName($_idRecette,$_nouveauNom){
 // Fonction pour mettre à jour la catégorie d'une recette
 function updateCategorie($_idRecette,$_nouvelleCategorie){
 
-    $connexion= my_connect();
-    $requette2= " UPDATE Recettes SET Nomcategorie =\"".$_nouvelleCategorie."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $connexion = my_connect();
+    $requette2 = " UPDATE Recettes SET Nomcategorie =\"".$_nouvelleCategorie."\" WHERE Idrecette = \"".$_idRecette."\"";
     $resultat2 = mysqli_query($connexion,$requette2);
     
     if (!$resultat2) {
@@ -373,8 +373,8 @@ function updateCategorie($_idRecette,$_nouvelleCategorie){
 // Fonction pour mettre à jour le nombre de personnes d'une recette
 function updateNombrePersonnes($_idRecette,$_nouveauNombre){
 
-    $connexion= my_connect();
-    $requette2= " UPDATE Recettes SET Nombrepersonne =\"".$_nouveauNombre."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $connexion = my_connect();
+    $requette2 = " UPDATE Recettes SET Nombrepersonne =\"".$_nouveauNombre."\" WHERE Idrecette = \"".$_idRecette."\"";
     $resultat2 = mysqli_query($connexion,$requette2);
     
     if (!$resultat2) {
@@ -387,9 +387,8 @@ function updateNombrePersonnes($_idRecette,$_nouveauNombre){
 
 // Fonction pour mettre à jour le nombre de personnes d'une recette
 function updateEtapes($_idRecette,$_nouvellesEtapes){
-
-    $connexion= my_connect();
-    $requette2= " UPDATE Recettes SET Etapes =\"".$_nouvellesEtapes."\" WHERE Idrecette = \"".$_idRecette."\"";
+    $connexion = my_connect();
+    $requette2 = " UPDATE Recettes SET Etapes =\"".$_nouvellesEtapes."\" WHERE Idrecette = \"".$_idRecette."\"";
     $resultat2 = mysqli_query($connexion,$requette2);
     
     if (!$resultat2) {
@@ -398,6 +397,26 @@ function updateEtapes($_idRecette,$_nouvellesEtapes){
         exit();
     }
     mysqli_close($connexion);
+}
+
+// Fonction pour vérifier si un ingrédient apaprtient à la composition d'une recette
+function inComposition($_idIngredient, $_idRecette){
+    $connexion= my_connect();
+    $requette_composant="SELECT Idingredient FROM Compositions join Ingredients USING(Idingredient) JOIN Recettes USING(Idrecette) where Idrecette = $_idRecette and Idingredient = $_idIngredient";
+    $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
+    if($table_composant_resultat){    
+        if (mysqli_num_rows($table_composant_resultat) == 0) {
+            $resultat = FALSE;
+        }  
+        else {
+            $resultat = TRUE;
+        }
+    }else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+    return $resultat;
 }
 
 ?>

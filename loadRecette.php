@@ -2,10 +2,43 @@
     session_start();
     include_once("./libDataBase.php");
     $_idRecette = $_GET["modifier"];
-    echo "modification de la recette :".$_idRecette."</br>";
     $_recette = loadRecette($_idRecette);
-    var_dump($_recette);
+
+    include_once('./entete.php');
+
+    // Gestion des erreurs du formulaire
+    $_erreur =  $_GET["erreur"];
+
+    // 1. Erreur liée au nom de la recette
+    if ($_erreur === "nameError"){
+        echo"<h1 id=\"headererror\">Veuillez renseigner un nom valide</h1>";
+    }
+
+    // 2. Erreur liée au nombre de personnes de la recette
+    if ($_erreur === "nombrePersonnesError"){
+        echo"<h1 id=\"headererror\">Veuillez renseigner un nombre de personnes valide (>0)</h1>";
+    }
+
+    // 3. Erreur liée aux étapes de la recette
+    if ($_erreur === "etapesError"){
+        echo"<h1 id=\"headererror\">Veuillez renseigner les étapes de la recette</h1>";
+    }
+    
+    // 4. Erreurs liées à l'ajout d'un nouveau ingrédient à la composition de la recette
+    if ($_erreur === "ingredientError"){
+        echo"<h1 id=\"headererror\">Veuillez sélectionner un ingrédient</h1>";
+    }
+    if ($_erreur === "quantiteError"){
+        echo"<h1 id=\"headererror\">Veuillez renseigner une quantité valide (> 0)</h1>";
+    }
+    if ($_erreur === "uniteError"){
+        echo"<h1 id=\"headererror\">Veuillez sélectionner une unité valide</h1>";
+    }
+    if ($_erreur === "ingredientAlreadyExist"){
+        echo"<h1 id=\"headererror\">L'ingrédient est déjà dans la recette <br> pour le modifier veuillez le supprimer d'abord</h1>";
+    }  
 ?>
+
 <html>
 <head>
     <meta charset="utf-8" />

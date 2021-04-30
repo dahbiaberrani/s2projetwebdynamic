@@ -90,7 +90,6 @@
     include_once("./entete.php");  
     
     //gestion des erreurs du formulaire
-
     if ($_erreur === "NomRecette"){
         echo"<h1 id=\"headererror\" >Nom de la recette incomplet</h1>";
     }
