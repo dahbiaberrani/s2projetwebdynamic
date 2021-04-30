@@ -50,20 +50,21 @@ h1{
 
 footer{
     background-color: rgb(75, 209, 209);;
-    position: fixed;
+    /*position: fixed;*/
 }
 table {
     border-width:1px; 
     border-style:solid; 
     border-color:black;
     width:50%;
-    }
-   td { 
+ }
+
+td { 
     border-width:1px;
     border-style:solid; 
     border-color:red;
     width:50%;
-    }
+}
 
 #recette {
     padding-left: 200px;
@@ -82,6 +83,9 @@ table {
     border-style:double;
     border-color:blue;
 
+}
+#formulaire_recette{
+    padding-left: 50px;
 }
 .login-form {
     width: 340px;

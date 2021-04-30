@@ -109,8 +109,8 @@
 
 <html>
     <body>
-        <h2>Ajout de nouvelles recettes</h2></br>
-        <div id="formilaire_ajout">
+        <h2>Ajout d'une nouvelle recette</h2></br>
+        <div id="formulaire_recette">
             <form action="./nouveauRecette.php" method="POST">
                 <!-- Nom recette -->
                 <div id="nom_recette">

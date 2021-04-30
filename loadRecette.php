@@ -38,17 +38,17 @@
         echo"<h1 id=\"headererror\">L'ingrédient est déjà dans la recette <br> pour le modifier veuillez le supprimer d'abord</h1>";
     }  
 ?>
-
 <html>
-<head>
-    <meta charset="utf-8" />
-    <title>mise à jour de recette</title>
-    <link rel="stylesheet" type="text/css"  href="./style/style.css" media="all">
-    
-</head>
+    <head>
+        <meta charset="utf-8" />
+        <title>mise à jour de recette</title>
+        <link rel="stylesheet" type="text/css"  href="./style/style.css" media="all">
+        
+    </head>
     <body>
+
         <h2>mise à jour de la recette : <?php echo $_recette['nomRecette'];?></h2></br>
-        <div id="formulaire_modification">
+        <div id="formulaire_recette">
             <!-- Image de la recette -->
             <?php echo "<img src=\"".$_recette['imageRecette']."\">"; ?>
             <!-- Nom recette -->
@@ -150,41 +150,41 @@
             </div>
             
             <?php
-                // Calcul et affichage du coût de la recette
-                $_ingerdients = array();
-                $_unites = array();
-                foreach($_recette['ingredientsRecette'] as $key=>$value){
-                    $_ingerdients+= array($key=>$_recette['ingredientsRecette'][$key]['quantite']);
-                    $_unites += array($key=>$_recette['ingredientsRecette'][$key]['unite']);         
-                }
+
+                // Affichage du coût de la recette   
                 echo "coût de la recette: ".$_recette['cout']."€<br>";
 
-                //  Affichage de la liste des ingrédients
+                //  Affichage de la liste des ingrédients        
                 echo "ingrdéients de la recette: <br> ";
-            
-                foreach($_recette['ingredientsRecette'] as $key=>$value){
-                    
-                    echo "<form action=\"./traitementModificationRecette.php\" method=\"GET\">";
-                        // Affichage de la quantite 
-                        echo $value['quantite'];
-                        //Affichage unité si différente de "unite"
-                        $_Unite = $value['unite'];
-                        if ($_Unite != "unite") {
-                            echo " ".$_Unite;
-                        }
-                        // Affichage du nom de l'ingrédient
-                        echo " ".$value['nom'];              
-                        //Ajout du bouton suppprimer afin de permettre la supression d'un ingrédient dans la recette.
-                        
-                            echo "<input type=\"hidden\"  name=\"idIngredientToDelete\" value=\"".$key."\">";
-                            echo "<input type=\"hidden\"  name=\"quantiteToDelete\" value=\"".$value['quantite']."\">";
-                            echo "<input type=\"hidden\"  name=\"unitToDelete\" value=\"".$_Unite."\">";
-                            echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
-                            echo "<input type=\"hidden\"  name=\"cout\" value=\"".$_recette['cout']."\">";
-                            echo "<button type=\"submit\" name=\"deleteIngredient\">supprimer</button>";
-                            
-                        echo "</form>";                 
-                }               
+                echo "<table>";
+                    foreach($_recette['ingredientsRecette'] as $key=>$value){
+                        echo "<tr>";
+                            echo "<form action=\"./traitementModificationRecette.php\" method=\"GET\">";
+                                 
+                                echo "<td>";
+                                    // Affichage de la quantite
+                                    echo $value['quantite'];
+                                    //Affichage unité si différente de "unite"
+                                    $_Unite = $value['unite'];
+                                    if ($_Unite != "unite") {
+                                        echo " ".$_Unite;
+                                    }
+                                    // Affichage du nom de l'ingrédient
+                                    echo " ".$value['nom'];  
+                                echo "</td>"; 
+                                echo "<td>";           
+                                    //Ajout du bouton suppprimer afin de permettre la supression d'un ingrédient dans la recette.
+                                    echo "<input type=\"hidden\"  name=\"idIngredientToDelete\" value=\"".$key."\">";
+                                    echo "<input type=\"hidden\"  name=\"quantiteToDelete\" value=\"".$value['quantite']."\">";
+                                    echo "<input type=\"hidden\"  name=\"unitToDelete\" value=\"".$_Unite."\">";
+                                    echo "<input type=\"hidden\"  name=\"idRecette\" value=\"".$_idRecette."\">";
+                                    echo "<input type=\"hidden\"  name=\"cout\" value=\"".$_recette['cout']."\">";
+                                    echo "<button type=\"submit\" name=\"deleteIngredient\">supprimer</button>";     
+                                echo "</td>";
+                            echo "</form>"; 
+                        echo "</tr>";                
+                    }
+                echo "</table>";               
             ?>
             <!-- ajouter etapes de prepartion recette  -->
             <div id="etape">
