@@ -40,7 +40,7 @@
                 // affichage de chaque recettes
                 if($resultat){
                     
-                    echo " <table border ><tr><th>Nom recette</th> <th>nombre commentaire</th></tr>";
+                    echo " <table border ><tr><th>Nom recette</th> <th>nombre de commentaires</th></tr>";
 
                     while($ligne=mysqli_fetch_object($resultat)){
                         echo "<tr ><td>".$ligne->Nomrecette."</td><td>".$ligne->nbCommentaire."</td></tr>";

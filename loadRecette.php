@@ -172,7 +172,7 @@
                                     // Affichage du nom de l'ingrédient
                                     echo " ".$value['nom'];  
                                 echo "</td>"; 
-                                echo "<td>";           
+                                echo "<td class=\"tdBoutton\">";           
                                     //Ajout du bouton suppprimer afin de permettre la supression d'un ingrédient dans la recette.
                                     echo "<input type=\"hidden\"  name=\"idIngredientToDelete\" value=\"".$key."\">";
                                     echo "<input type=\"hidden\"  name=\"quantiteToDelete\" value=\"".$value['quantite']."\">";
