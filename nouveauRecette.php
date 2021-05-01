@@ -76,11 +76,77 @@
             }
         }
     } 
+
+    if (isset($_POST['uploadImage'])){
+        echo"<h1 id=\"headererror\" >Telechargement de la photo</h1>";
+        var_dump($_FILES);
+        // Tableaux de donnees
+        $tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
+        $infosImg = array();
+        
+        // Variables
+        $extension = '';
+        $nomImage = '';
+        
+            
+        // On verifie si le fichier est bien sélectionné
+        if( !empty($_FILES['fichier']['name']) )
+        {
+            // Recuperation de l'extension du fichier
+            $extension  = pathinfo($_FILES['fichier']['name'], PATHINFO_EXTENSION);
+
+            // On verifie l'extension du fichier pour être sûr que c'est une image
+            if(in_array(strtolower($extension),$tabExt))
+            {
+                // On recupere les infotrmations du du fichier
+                $infosImg = getimagesize($_FILES['fichier']['tmp_name']);
+
+                // On verifie le type ndu ficheir que c'est une l'image
+                if($infosImg[2] >= 1 && $infosImg[2] <= 14)
+                {
+                    // On renomme le fichier pour lui donner un nom unique
+                    // Pour ne pas ecraser une image qui aurait par hasard le même nom
+                    $nomImage = "./images/".md5(uniqid()).'.'.$extension;  
+                    
+                    // changer les droits du répértoire cible car à chaque fois ils reviennent comme avant.
+                    $destination = "/opt/CRIE/dahbia.berrani-eps-h/public_html/s2projetwebdynamic/images";
+                    $chmod = "0774";
+                    if(!chmod($destination,octdec($chmod))){
+                        echo "<h1 id=\"headererror\" >Impossible de changer les droit du répértoire!</h1>";
+                        echo get_current_user ( );
+                    }
+                    
+                    if (move_uploaded_file($_FILES['fichier']['tmp_name'], $nomImage)) {
+                        $_SESSION['imagePath'] = $nomImage;
+                    }
+                    else {
+                        // Sinon il y a une erreur
+                        echo "<h1 id=\"headererror\" >Problème lors du chargement <br> Veuillez réessayer !</h1>";
+                        
+                    }
+                    
+                }
+                else {
+                    // Sinon erreur sur le type de l'image
+                    echo "<h1 id=\"headererror\" >Le fichier sélectionné n\'est pas une image !</h1>";
+                }
+            }
+            else {
+                // Sinon on affiche une erreur pour l'extension
+                echo "<h1 id=\"headererror\" >L\'extension du fichier est incorrecte !</h1>";          
+            }
+        }
+        else {
+            // Sinon on affiche une erreur pour le champ vide
+            echo "<h1 id=\"headererror\" >Veuillez sélectionner une image !</h1>";
+        }
+    }
     
     //fonction d'annulation de toutes les variable de session relatives a l'ajout de recette
     function unsetRecetteVariables(){
         unset($_SESSION["mes_ingredients"]);
         unset($_SESSION["uniteMesure"]);
+        unset($_SESSION['imagePath']);
     }
     if (isset($_POST['annuler'])){
         //Annulation de toutes les variable de session relatives a l'ajout de recette
@@ -97,7 +163,7 @@
         echo"<h1 id=\"headererror\" >Catégorie de la recette incomplet</h1>";
     }
     elseif ($_erreur === "NombrePersonne"){
-        echo"<h1 id=\"headererror\" >Nombre de personnes de la recette incomplet</h1>";
+        echo"<h1 id=\"headererror\" >Nombre de personnes de la recette invalide</h1>";
     }
     elseif($_erreur === "mes_ingredients"){
         echo"<h1 id=\"headererror\" >ingrédients de la recette incomplet</h1>";
@@ -111,7 +177,20 @@
     <body>
         <h2>Ajout d'une nouvelle recette</h2></br>
         <div id="formulaire_recette">
-            <form action="./nouveauRecette.php" method="POST">
+            <form enctype="multipart/form-data" action="./nouveauRecette.php" method="POST">
+                <!-- Formulaire pour ajouter la photo de la recette -->
+                <fieldset>
+                    <legend>Ajout de la photo</legend>
+                    <p>
+                        <label for="fichier_a_uploader" title="Recherchez le fichier à uploader !">Sélectionnez une image :</label>
+                
+                        <input name="fichier" type="file" id="fichier_a_uploader" />
+                        <input type="submit" name="uploadImage" value="Charger" />
+                    </p>
+                </fieldset>
+
+                <!-- Afficahge de l'image si elle à été rajoutée -->
+                <img src="<?php echo $_SESSION['imagePath'];?>"><br>
                 <!-- Nom recette -->
                 <div id="nom_recette">
                     <label for="NomRecette">Nom Recette</label>
@@ -156,7 +235,7 @@
                 <div id="nbpersonne">
                     <!-- ajouter nombre de personne  -->
                     <label for="NombrePersonne ">Nombre personne </label>
-                    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['NombrePersonne'];} ?>"> 
+                    <input  id="NombrePersonne" name="NombrePersonne" type="number" value="<?php if (!isset($_POST['annuler'])){echo$_POST['NombrePersonne'];}?>"> 
                 </div>
                 
 
@@ -206,7 +285,7 @@
                 <p>Vous ne trouvez pas votre ingrédient?:<a href="./newIngredient.php" target="_blank">Ajouter un nouveau ingrédient</a></p>
 
 
-                <!-- code php pour afficher les ingredient en forme d'un tableau   -->   
+                <!-- code php pour afficher les ingredients en forme d'un tableau   -->   
                 <?php 
                 
                     $unite = $_POST['unite'];
@@ -216,7 +295,7 @@
                         $_SESSION["uniteMesure"] = array();
                     }
 
-                    if (isset($_POST['ajouter']) && !empty($_POST['unite']) && !empty($_POST['Quantite']) && !empty($_POST['Idingredient'])){
+                    if (isset($_POST['ajouter']) && !empty($_POST['unite']) && !empty($_POST['Quantite']) && intval($_GET['Quantite']) > 0 && !empty($_POST['Idingredient'])){
 
                         $idIngredient = $_POST['Idingredient'];
                         $_SESSION["mes_ingredients"]+= array($idIngredient=>$quantite);

@@ -63,7 +63,12 @@
         if($table_composant_resultat){
             echo ("Ingredients: <ul> ");
             while($ligne_composant=mysqli_fetch_object($table_composant_resultat)){
-                echo ("<li>".$ligne_composant->Quantitee."".$ligne_composant->Unite." ".$ligne_composant->Nomingredient."</li>");
+                if ($ligne_composant->Unite === "unite") {
+                    echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Nomingredient.".</li>");
+                }
+                else {        
+                    echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Unite." de ".$ligne_composant->Nomingredient.".</li>");
+                }             
             }
             echo "</ul>";
         }else{
