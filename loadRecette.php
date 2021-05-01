@@ -50,7 +50,7 @@
         <h2>mise à jour de la recette : <?php echo $_recette['nomRecette'];?></h2></br>
         <div id="formulaire_recette">
             <!-- Image de la recette -->
-            <?php echo "<img src=\"".$_recette['imageRecette']."\">"; ?>
+            <?php echo "<img class =\"center\" src=\"".$_recette['imageRecette']."\">"; ?>
             <!-- Nom recette -->
             <div id="nom_recette">
                 <form action="./traitementModificationRecette.php" method="GET">
@@ -190,7 +190,7 @@
             <div id="etape">
                 <form action="./traitementModificationRecette.php" method="GET"> 
                     <label for="etapes">Etapes de preparation</label></br>
-                    <textarea  id="etapes" name="etapes" cols="50" rows="20" ><?php echo $_recette['etapesRecette']; ?></textarea>
+                    <textarea  id="etapes" name="etapes" cols="100" rows="10" ><?php echo $_recette['etapesRecette']; ?></textarea>
                     <input type="hidden"  name="idRecette" value="<?php echo $_idRecette;?>">
                     <button type="submit" name="changeRecetteEtapes">Confirmez la modification</button>
                 </form>

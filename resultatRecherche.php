@@ -1,13 +1,11 @@
 <?php
     session_start();
-    include_once("./entete.php");
+   
  ?>
 <html>
 <body>
 <?php 
-    
-      
-    
+    include_once("./entete.php");
     include_once("./libRecherche.php");
      
 

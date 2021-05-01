@@ -120,7 +120,7 @@
             //Ajout du bouton commenter
             echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
             //Ajout de la zone de saisie du commentaire
-            echo "<textarea  name=\"commentaire\" cols=\"150\" rows=\"5\" > </textarea>";
+            echo "<textarea  name=\"commentaire\" cols=\"100\" rows=\"5\" > </textarea>";
             echo "<button type=\"submit\">commenter</button>";
             echo "<input type=\"hidden\"  name=\"commenter\" value=\"".$_idRecette."\">";
             echo "</form>";            
@@ -138,7 +138,7 @@
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
             echo ("<div id=\"recette\">");
             afficherControlRecetteAdmin($_idRecette);
-            echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+            echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
             afficherIngredients($_idRecette);     
             // affichage des Etapes recettes    

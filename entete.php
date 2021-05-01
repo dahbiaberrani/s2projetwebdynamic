@@ -53,10 +53,9 @@
               
                  
               <?php 
-                
-                 
+                             
                  if (isset($_SESSION["user"])){
-                     echo "<li><a href=\"./nouveauRecette.php\">ajouter recette</a></li>";
+                     echo "<li><a href=\"./nouvelleRecette.php\">ajouter recette</a></li>";
                  }
                   
                   
