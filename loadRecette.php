@@ -49,8 +49,10 @@
 
         <h2>mise à jour de la recette : <?php echo $_recette['nomRecette'];?></h2></br>
         <div id="formulaire_recette">
+            
             <!-- Image de la recette -->
             <?php echo "<img class =\"center\" src=\"".$_recette['imageRecette']."\">"; ?>
+
             <!-- Nom recette -->
             <div id="nom_recette">
                 <form action="./traitementModificationRecette.php" method="GET">
@@ -60,6 +62,7 @@
                     <button type="submit" name="changeRecetteName">Confirmez la modification</button>
                 </form>     
             </div>
+
             <!-- choix Catégorie recette -->
             <div id="categorie">
                 <form action="./traitementModificationRecette.php" method="GET">

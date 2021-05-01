@@ -136,7 +136,7 @@
         // affichage chaque recettes
         if($table_recette_resultat){
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
-            echo ("<div id=\"recette\">");
+            echo ("<div class=\"recette\" id=\"".."\">");
             afficherControlRecetteAdmin($_idRecette);
             echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
