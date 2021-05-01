@@ -135,22 +135,24 @@
         mysqli_close($connexion);  
     }
 
-    // afficher les recettes  qui couttent moins de $cout
+    // afficher les recettes  qui couttent moins que $cout
     function afficherTout_prix($cout){
         // Connexion à la base de données
         $connexion= my_connect();
         // Récupération des recettes 
-        $requette_recette="  SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes where  Cout <= $cout ";      
-        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+        $requette_recette = " SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout FROM Recettes where  Cout <= $cout";      
+        $table_recette_resultat =  mysqli_query($connexion, $requette_recette);
         // affichage chaque recettes
-        if($table_recette_resultat){
-            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
+        if ($table_recette_resultat) {
+            while ($ligne_recette=mysqli_fetch_object($table_recette_resultat)) {
                 afficherRecette($ligne_recette->Idrecette);
             }
         }
-        else{
-            echo "<p>Erreur dans l'exécution de la requette</p>";
+        else {
+            echo "<p>Erreur dans l'exécution de la requette afficherTout_prix</p>";
             echo"message de mysqli:".mysqli_error($connexion);
+
+            echo  "<br>".$requette_recette;
         }
         mysqli_close($connexion);
     }           

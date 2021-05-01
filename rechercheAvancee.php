@@ -12,14 +12,9 @@
 				<option value="entree">Entrée</option>
 				<option value="dessert">Dessert</option>
 			</select> 
-			
-			<label  for = 'cout'>Sélectionner par prix</label>
-			<select  id="cout" name ="cout">
-				<option value="*">tout prix</option>	
-				<option value="moins_3">moins 3€ </option>
-				<option value="moins_5"> moins 5 € </option>
-				<option value="moyen_10"> moins 10€</option>
-			</select>
+			<label  for = 'categorie'>Coûtant moins de: </label>
+			<input  id="cout" name ="cout" type="number" step ="0.01" >
+			<label  for = 'categorie'>€</label>
 			<br/> 
 			<input value="Selectionner" type="submit"/> 
 		</form>
