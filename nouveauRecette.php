@@ -10,30 +10,34 @@
     $Idingredient = $_POST["Idingredient"];
     $Quantite = $_POST["Quantite"];
     $unite = $_POST["unite"];
-    $etapes= $_POST["etapes"];
+    $etapes = $_POST["etapes"];
 
     if (isset($_POST['Envoyer'])){
-        if (empty( $_POST["NomRecette"])){
+        if (!isset($_SESSION['imagePath'])) {
+            $_erreur = "NoImage";
+        }
+        elseif (empty($_POST["NomRecette"])) {
             $_erreur = "NomRecette";
         }
-        elseif(empty($_POST["categorie"])){
+        elseif(empty($_POST["categorie"])) {
             $_erreur = "categorie";
         }
-        elseif (empty($_POST["NombrePersonne"])){
+        elseif (empty($_POST["NombrePersonne"])) {
             $_erreur = "NombrePersonne";
         }
-        elseif(count($_SESSION["mes_ingredients"])==0){
+        elseif(count($_SESSION["mes_ingredients"])==0) {
             $_erreur = "mes_ingredients";
         }
-        elseif(!(isset($_POST['etapes']) && !empty($_POST['etapes']))){
+        elseif(!(isset($_POST['etapes']) && !empty($_POST['etapes']))) {
             $_erreur = "etapes";
         } 
-        else{
+        else {
             $_erreur = "FALSE";
+
+            // Insertion de la nouvelle recette
             $cout_recette = calculCout($_SESSION["mes_ingredients"],$_SESSION["uniteMesure"]);
-            $requette1=("INSERT INTO `Recettes` ( `Nomrecette`, `Etapes`, `Nomcategorie`, `Nombrepersonne`,`Cout`) 
-    
-                VALUES  (\"".$Nomrecette."\",\"".$etapes."\",\"".$categorie."\" ,\"".$NombrePersonne."\" ,\"".$cout_recette."\")");
+            $requette1=("INSERT INTO `Recettes` ( `Nomrecette`, `Etapes`, `Nomcategorie`, `Nombrepersonne`,`Cout`, `Imagepath`) 
+                VALUES  (\"".$Nomrecette."\",\"".$etapes."\",\"".$categorie."\" ,\"".$NombrePersonne."\" ,\"".$cout_recette."\" ,\"".$_SESSION['imagePath']."\")");
 
             $resultat1 = mysqli_query($connexion,$requette1);
 
@@ -52,8 +56,7 @@
                 }
     
 
-                //insertion des ingrédients de la recettes
-
+                // Iinsertion des ingrédients de la recettes
                 foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
                     $requette2= "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
                             VALUES (\"". $key."\", \"". $Id_recette."\", \"".  $quantite."\", \"".  $_SESSION["uniteMesure"][$key]."\" )";
@@ -77,9 +80,8 @@
         }
     } 
 
+    // Charegement de l'image sélectionnée sur le serveur dans le répertoire images.
     if (isset($_POST['uploadImage'])){
-        echo"<h1 id=\"headererror\" >Telechargement de la photo</h1>";
-        var_dump($_FILES);
         // Tableaux de donnees
         $tabExt = array('jpg','gif','png','jpeg');    // Extensions autorisees
         $infosImg = array();
@@ -156,7 +158,10 @@
     include_once("./entete.php");  
     
     //gestion des erreurs du formulaire
-    if ($_erreur === "NomRecette"){
+    if($_erreur === "NoImage"){
+        echo"<h1 id=\"headererror\" >Veuillez charger une image de la recette</h1>";
+    } 
+    elseif ($_erreur === "NomRecette"){
         echo"<h1 id=\"headererror\" >Nom de la recette incomplet</h1>";
     }
     elseif($_erreur === "categorie"){
@@ -171,6 +176,7 @@
     elseif($_erreur === "etapes"){
         echo"<h1 id=\"headererror\" >Les étapes de la recette incompletes</h1>";
     } 
+    
 ?>
 
 <html>
@@ -295,7 +301,7 @@
                         $_SESSION["uniteMesure"] = array();
                     }
 
-                    if (isset($_POST['ajouter']) && !empty($_POST['unite']) && !empty($_POST['Quantite']) && intval($_GET['Quantite']) > 0 && !empty($_POST['Idingredient'])){
+                    if (isset($_POST['ajouter']) && !empty($_POST['unite']) && !empty($_POST['Quantite']) && !empty($_POST['Idingredient'])){
 
                         $idIngredient = $_POST['Idingredient'];
                         $_SESSION["mes_ingredients"]+= array($idIngredient=>$quantite);
@@ -308,9 +314,13 @@
                     echo"<ul>";
                     foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
                         echo"<li>";
-                        // recupérer Nom ingredient 
-                        echo getIngredientNameById($key).":".$quantite."".$_SESSION["uniteMesure"][$key];
-                        echo $_POST['$nouvIngredient'];
+                        // recupérer Nom ingredient et affichage sur la page des inforamtions
+                        if ($_SESSION["uniteMesure"][$key] === "unite") {
+                            echo getIngredientNameById($key).": ".$quantite;
+                        }
+                        else {
+                            echo getIngredientNameById($key).": ".$quantite." ".$_SESSION["uniteMesure"][$key];
+                        }
                         echo"</li>";
                     }
                     echo"</ul>";
