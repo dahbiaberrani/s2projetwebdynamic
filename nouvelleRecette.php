@@ -124,7 +124,7 @@
 
                 //Annulation de toutes les variable de session relatives a l'ajout de recette
                 unsetRecetteVariables(); 
-                header('Location: ./resultatRecherche.php?categorie='.strtolower($categorie).'&cout=*');   
+                header('Location: ./resultatRecherche.php?categorie='.strtolower($categorie).'#'.$Id_recette);   
                 
                 // Déconnexion de la base de données
                 mysqli_close($connexion);
