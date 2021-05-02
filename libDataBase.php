@@ -67,7 +67,7 @@
                     echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Nomingredient.".</li>");
                 }
                 else {        
-                    echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Unite." de ".$ligne_composant->Nomingredient.".</li>");
+                    echo ("<li>".$ligne_composant->Quantitee."<strong> ".$ligne_composant->Unite."</strong> de ".$ligne_composant->Nomingredient.".</li>");
                 }             
             }
             echo "</ul>";
@@ -99,18 +99,46 @@
 
     //fonction qui affiche les boutons de contrôl de la recette selon le type de connexion (administrateur ou simple utilisateur)
     function afficherControlRecetteAdmin($_idRecette){
-        if ($_SESSION["user"] === "admin" ){
-            //Ajout du bouton suppprimer
-            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
-            echo "<button type=\"submit\">supprimer</button>";
-            echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
-            echo "</form>";
+        if (isset($_SESSION["user"])) {
+            if ($_SESSION["user"] === "admin" ){
+                //Ajout du bouton suppprimer
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">supprimer</button>";
+                        echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
+                    echo "</form>";
+                echo "</div>";
 
-            //Ajout du boutton modifier (mise à jour)
-            echo "<form action=\"./loadRecette.php\" method=\"GET\">";
-            echo "<button type=\"submit\">modifier</button>";
-            echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
-            echo "</form>";         
+                //Ajout du boutton modifier (mise à jour)
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./loadRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">modifier</button>";
+                        echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>";     
+            }
+   
+            if (isFavoris($_idRecette)) {
+                // Ajout du boutton Supprimer des Favoris
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">supprimer des favoris</button>";
+                        echo "<input type=\"hidden\"  name=\"supprimerFavoris\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>"; 
+                // Affichage de l'icone pour indiquer qu'elle fait aprtie des favoris
+                echo "<img class=\"favoris\"src=./images/favoris.jpg>";
+            }
+            else {         
+                // Ajout du boutton Ajouter aux Favoris
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">ajouter aux favoris</button>";
+                        echo "<input type=\"hidden\"  name=\"ajoutFavoris\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>";   
+            }
+
         }
     }
 
@@ -136,7 +164,7 @@
         // affichage chaque recettes
         if($table_recette_resultat){
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
-            echo ("<div class=\"recette\" id=\"".."\">");
+            echo ("<div class=\"recette\" id=\"".$_idRecette."\">");
             afficherControlRecetteAdmin($_idRecette);
             echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
@@ -215,8 +243,24 @@
         mysqli_close($connexion);
     }
 
+    // Fonction qui supprime une recette de toutes les listes de favoris de tous les utilisateurs
+    function supprimerFavoris($_idRecette){
+        // recherche de tout les référencement favoris
+        $connexion= my_connect();
+        $requette_favoris="DELETE FROM Favoris where Idrecette = $_idRecette";
+        $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+        if(!$table_favoris_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo "message de mysqli:".mysqli_error($connexion)."<br>";
+            echo $requette_favoris;
+        }
+        mysqli_close($connexion);
+    }
+
     // fonction qui supprime une recette de la base de donnees 
     function supprimerRecette($_idRecette){
+        // suppression de la table des favoris des tilisateurs qui l'ot msie comme favoris
+        supprimerFavoris($_idRecette);
         // suppression de tout les commentaires de la recette
         supprimerToutCommentaires($_idRecette);
         // suppression des ingrédients de la recette
@@ -411,14 +455,155 @@ function inComposition($_idIngredient, $_idRecette){
     $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
     if($table_composant_resultat){    
         if (mysqli_num_rows($table_composant_resultat) == 0) {
-            $resultat = FALSE;
+            $resultat = false;
         }  
         else {
-            $resultat = TRUE;
+            $resultat = true;
         }
     }else{
         echo "<p>Erreur dans l'exécution de la requette</p>";
         echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+    return $resultat;
+}
+
+// Fonction pour ajouté une recette à la liste des recettes à modérer par l'administarteur
+function ajouterModeration($Id_recette){
+    $connexion= my_connect();
+    $requette_moderation="INSERT INTO `Moderations` (`Idmoderation`) VALUES (\"".$Id_recette."\")";
+   
+    $table_moderations_resultat =  mysqli_query($connexion,$requette_moderation);   
+    if(!$table_moderations_resultat) {      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        echo $requette_moderation;
+    }
+    mysqli_close($connexion);
+}
+
+//fonction qui affiche les boutons de contrôl pour la modération d'une recette par l'administrateur (acceptation ou Refuser)
+function afficherControlRecetteAdminModeration($_idRecette){
+    if ($_SESSION["user"] === "admin" ){
+        //Ajout du boutton Accepter 
+        echo "<div class=\"controlAdmin\">";
+            echo "<form  action=\"./modererRecette.php\" method=\"GET\">";
+                echo "<button type=\"submit\">accepter</button>";
+                echo "<input type=\"hidden\"  name=\"accepter\" value=\"".$_idRecette."\">";
+            echo "</form>"; 
+        echo "</div>";
+
+        //Ajout du bouton Refuser
+        echo "<div class=\"controlAdmin\">";
+            echo "<form  action=\"./modererRecette.php\" method=\"GET\">";
+                echo "<button type=\"submit\">refuser</button>";
+                echo "<input type=\"hidden\"  name=\"refuser\" value=\"".$_idRecette."\">";
+            echo "</form>";
+        echo "</div>";        
+    }
+}
+
+// Fonction qui affiche les recette en attente de modération
+function afficherRecettePourModeration($_idRecette){
+    $connexion= my_connect();
+    // Récupération des recettes 
+    $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout,Nomcategorie FROM Recettes where Idrecette = $_idRecette";                  
+    $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+    // affichage chaque recettes
+    if($table_recette_resultat){
+        $ligne_recette=mysqli_fetch_object($table_recette_resultat);
+        echo ("<div class=\"recette\" id=\"".$_idRecette."\">");
+        afficherControlRecetteAdminModeration($_idRecette);
+        echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+        // affichage de chaque Ingrediens 
+        afficherIngredients($_idRecette);     
+        // affichage des Etapes recettes    
+        echo "<p>".$ligne_recette->Etapes."</p>";
+        echo "</div>"; 
+    }
+    else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour refuser une recette par l'administrateur
+function  refuserRecette($_idRecette){
+    // Supprimer la recette de la table Moderations
+    $connexion = my_connect();
+    $requette_recettes = "DELETE FROM Moderations where Idmoderation = $_idRecette";
+    $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+    if(!$table_recettes_resultat){      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion); 
+        echo $requette_recettes;
+    }
+    // Supression de la recette de la table recette
+    supprimerRecette($_idRecette);
+    mysqli_close($connexion);
+}
+
+
+// Fonction pour refuser une recette par l'administrateur
+function  accepterRecette($_idRecette){
+    // Supprimer la recette de la table Moderations
+    $connexion = my_connect();
+    $requette_recettes = "DELETE FROM Moderations where Idmoderation = $_idRecette";
+    $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+    if(!$table_recettes_resultat){      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion); 
+        echo $requette_recettes;
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour rajouter une recette à ses favoris
+function ajouterAuxFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="INSERT INTO `Favoris` (`Idrecette`, `Idutilisateur`) VALUES (\"".$_idRecette."\",\"".$_SESSION["userid"]."\")";
+   
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if(!$table_favoris_resultat) {      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion);
+        echo $requette_moderation;
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction qui permet de savoir si une recette fait partis des favoris de l'utlisateur connecté
+function isFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="SELECT Idutilisateur FROM Favoris WHERE Idutilisateur =".$_SESSION["userid"]." and Idrecette =".$_idRecette;
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if($table_favoris_resultat){    
+        if (mysqli_num_rows($table_favoris_resultat) == 0) {
+            $resultat = false;
+        }  
+        else {
+            $resultat = true;
+        }
+    }
+    else {
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion);
+        echo $requette_favoris;
+    }
+    mysqli_close($connexion);
+    return $resultat;
+}
+
+// Fonction pour supprimer une recette de la liste des favoris de l'utilisateur connecté
+function supprimerDesFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="DELETE FROM Favoris WHERE Idutilisateur =".$_SESSION["userid"]." and Idrecette =".$_idRecette;
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if(!$table_favoris_resultat){    
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion);
+        echo $requette_favoris;
     }
     mysqli_close($connexion);
     return $resultat;

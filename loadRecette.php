@@ -169,9 +169,12 @@
                                     echo $value['quantite'];
                                     //Affichage unité si différente de "unite"
                                     $_Unite = $value['unite'];
-                                    if ($_Unite != "unite") {
-                                        echo " ".$_Unite;
-                                    }
+                                    if ($_Unite === "unite") {
+                                        echo " ";                    
+                                    }  
+                                    else {
+                                        echo "<strong> ".$_Unite."</strong>"; 
+                                    }        
                                     // Affichage du nom de l'ingrédient
                                     echo " ".$value['nom'];  
                                 echo "</td>"; 

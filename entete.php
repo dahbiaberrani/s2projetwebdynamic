@@ -8,15 +8,14 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <header>
-      <h1>Rendez-vous dans l'assiette</h1>
-
-      <nav id="menu">
+   <h1>Rendez-vous dans l'assiette</h1>
+   <nav id="menu">
       <ul>
          <li>
-            <a href="./resultatRecherche.php?categorie=*">tout</a>
+            <a href="./resultatRecherche.php?categorie=*">toutes</a>
          </li>
          <li>
-            <a href="./resultatRecherche.php?categorie=entree">Entres</a>
+            <a href="./resultatRecherche.php?categorie=entree">Entrées</a>
          </li>
          <li>
             <a href="./resultatRecherche.php?categorie=plat">Plats</a>
@@ -45,10 +44,13 @@
          <?php                 
             if (isset($_SESSION["user"])){
                echo "<li><a href=\"./nouvelleRecette.php\">ajouter recette</a></li>";
+               echo "<li><a href=\"./favorisRecette.php\">Favoris</a></li>";
+               if ($_SESSION["user"] === "admin") {
+                  echo "<li><a href=\"./modererRecette.php\">Modérer Recettes</a></li>";
+               }
             }              
          ?>
       </ul>
    </nav>
            
 </header>
-

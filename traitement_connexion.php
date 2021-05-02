@@ -7,11 +7,9 @@
     {
         $email = htmlspecialchars($_POST['email']);
         $passworde = htmlspecialchars($_POST['password']);
-        $requette = "SELECT  pseudo, password FROM Utilisateurs WHERE email = \"".$email."\"";
+        $requette = "SELECT  id, pseudo, password FROM Utilisateurs WHERE email = \"".$email."\"";
         $resultat = mysqli_query($connexion,$requette);
         
-
-
         if($resultat == 1)
         {
             if(mysqli_num_rows($resultat) == 0){
@@ -24,6 +22,7 @@
                 if(password_verify($passworde,$user->password ))
                 {                  
                     $_SESSION["user"] = $user->pseudo;
+                    $_SESSION["userid"] = $user->id;
                     header('Location: ./index.php');                 
                     exit();
                 }
