@@ -44,10 +44,12 @@
          <?php                 
             if (isset($_SESSION["user"])){
                echo "<li><a href=\"./nouvelleRecette.php\">ajouter recette</a></li>";
+               if ($_SESSION["user"] === "admin") {
+                  echo "<li><a href=\"./modererRecette.php\">Modérer Recettes</a></li>";
+               }
             }              
          ?>
       </ul>
    </nav>
            
 </header>
-

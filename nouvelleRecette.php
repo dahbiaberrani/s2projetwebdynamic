@@ -109,10 +109,10 @@
                 }
     
 
-                // Iinsertion des ingrédients de la recettes
+                // Insertion des ingrédients de la recettes
                 foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
                     $requette2= "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
-                            VALUES (\"". $key."\", \"".$Id_recette."\", \"". $quantite."\", \"". $_SESSION["uniteMesure"][$key]."\" )";
+                                VALUES (\"". $key."\", \"".$Id_recette."\", \"". $quantite."\", \"". $_SESSION["uniteMesure"][$key]."\" )";
                     $resultat2 = mysqli_query($connexion,$requette2);
                     
                     if (!$resultat2) {
@@ -122,13 +122,25 @@
                     }
                 }
 
-                //Annulation de toutes les variable de session relatives a l'ajout de recette
-                unsetRecetteVariables(); 
-                header('Location: ./resultatRecherche.php?categorie='.strtolower($categorie).'#'.$Id_recette);   
-                
+                // La recette est rajouée à la base de données
                 // Déconnexion de la base de données
                 mysqli_close($connexion);
-                exit();
+                //Annulation de toutes les variable de session relatives a l'ajout de recette
+                unsetRecetteVariables(); 
+
+                // Si c'est un utilisateur et non l'administrateur qui a rajouter la recette la mettre en attente de modération
+                if ($_SESSION["user"] === "admin"){
+                    // Redirection pour montrer la recette qui vient d'être rajoutée
+                    header('Location: ./resultatRecherche.php?categorie='.strtolower($categorie).'#'.$Id_recette);
+                    exit();
+                }
+                else{
+                    ajouterModeration($Id_recette);
+                    // Redirection pour proposer l'ajout d'une nouvelle recette en indiquant que la precédente est bien prise en compte
+                    header('Location: ./nouvelleRecette.php?succes=SuccesAjout');
+                    exit();
+                }
+                
             }else{
                 echo "<p>Erreur dans l'exécution de la requette d'ajout de la recette</p>";
                 echo"message de mysqli:".mysqli_error($connexion);

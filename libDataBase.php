@@ -438,4 +438,77 @@ function ajouterModeration($Id_recette){
     mysqli_close($connexion);
 }
 
+//fonction qui affiche les boutons de contrôl pour la modération d'une recette par l'administrateur (acceptation ou Refuser)
+function afficherControlRecetteAdminModeration($_idRecette){
+    if ($_SESSION["user"] === "admin" ){
+         //Ajout du boutton Accepter (mise à jour)
+         echo "<form action=\"./modererRecette.php\" method=\"GET\">";
+         echo "<button type=\"submit\">accepter</button>";
+         echo "<input type=\"hidden\"  name=\"accepter\" value=\"".$_idRecette."\">";
+         echo "</form>"; 
+
+        //Ajout du bouton Refuser
+        echo "<form action=\"./modererRecette.php\" method=\"GET\">";
+        echo "<button type=\"submit\">refuser</button>";
+        echo "<input type=\"hidden\"  name=\"refuser\" value=\"".$_idRecette."\">";
+        echo "</form>";        
+    }
+}
+
+// Fonction qui affiche les recette en attente de modération
+function afficherRecettePourModeration($_idRecette){
+    $connexion= my_connect();
+    // Récupération des recettes 
+    $requette_recette="SELECT Idrecette,Nomrecette,Imagepath,Etapes,Nombrepersonne,Cout,Nomcategorie FROM Recettes where Idrecette = $_idRecette";                  
+    $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+    // affichage chaque recettes
+    if($table_recette_resultat){
+        $ligne_recette=mysqli_fetch_object($table_recette_resultat);
+        echo ("<div class=\"recette\" id=\"".$_idRecette."\">");
+        afficherControlRecetteAdminModeration($_idRecette);
+        echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
+        // affichage de chaque Ingrediens 
+        afficherIngredients($_idRecette);     
+        // affichage des Etapes recettes    
+        echo "<p>".$ligne_recette->Etapes."</p>";
+        echo "</div>"; 
+    }
+    else{
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction pour refuser une recette par l'administrateur
+function  refuserRecette($_idRecette){
+    // Supprimer la recette de la table Moderations
+    $connexion = my_connect();
+    $requette_recettes = "DELETE FROM Moderations where Idmoderation = $_idRecette";
+    $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+    if(!$table_recettes_resultat){      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion); 
+        echo $requette_recettes;
+    }
+    // Supression de la recette de la table recette
+    supprimerRecette($_idRecette);
+    mysqli_close($connexion);
+}
+
+
+// Fonction pour refuser une recette par l'administrateur
+function  accepterRecette($_idRecette){
+    // Supprimer la recette de la table Moderations
+    $connexion = my_connect();
+    $requette_recettes = "DELETE FROM Moderations where Idmoderation = $_idRecette";
+    $table_recettes_resultat =  mysqli_query($connexion,$requette_recettes);   
+    if(!$table_recettes_resultat){      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion); 
+        echo $requette_recettes;
+    }
+    mysqli_close($connexion);
+}
+
 ?>

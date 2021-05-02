@@ -64,7 +64,7 @@
         $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
         // affichage chaque recettes
         if($table_recette_resultat){
-            echo ("Bienvenue sur mon site ");
+
             while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
                 afficherRecette($ligne_recette->Idrecette);
             }
@@ -155,5 +155,24 @@
             echo  "<br>".$requette_recette;
         }
         mysqli_close($connexion);
-    }           
+    }   
+    
+    // Afficahge des recettes en attente de modération
+    function afficherRecetteAModerer(){
+        $connexion= my_connect();
+        // Récupération des recettes 
+        $requette_recette="SELECT Idrecette FROM Recettes WHERE Idrecette in (SELECT Idmoderation FROM Moderations)";      
+                
+        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+        // affichage chaque recettes
+        if($table_recette_resultat){
+            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
+                afficherRecettePourModeration($ligne_recette->Idrecette);
+            }
+        }else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
 ?>
