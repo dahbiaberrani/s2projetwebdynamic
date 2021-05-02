@@ -67,7 +67,7 @@
                     echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Nomingredient.".</li>");
                 }
                 else {        
-                    echo ("<li>".$ligne_composant->Quantitee." ".$ligne_composant->Unite." de ".$ligne_composant->Nomingredient.".</li>");
+                    echo ("<li>".$ligne_composant->Quantitee."<strong> ".$ligne_composant->Unite."</strong> de ".$ligne_composant->Nomingredient.".</li>");
                 }             
             }
             echo "</ul>";
@@ -455,10 +455,10 @@ function inComposition($_idIngredient, $_idRecette){
     $table_composant_resultat =  mysqli_query($connexion,$requette_composant);   
     if($table_composant_resultat){    
         if (mysqli_num_rows($table_composant_resultat) == 0) {
-            $resultat = FALSE;
+            $resultat = false;
         }  
         else {
-            $resultat = TRUE;
+            $resultat = true;
         }
     }else{
         echo "<p>Erreur dans l'exécution de la requette</p>";

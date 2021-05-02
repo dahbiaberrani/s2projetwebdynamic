@@ -56,7 +56,7 @@ if (isset($_GET['addRecetteIngredient'])) {
     }
 
     // Vérification que le nouveau ingrédient n'existe pas déjà dans la composition de la recette
-    if (inComposition($_GET['Idingredient'], $_GET['idRecette']) == TRUE) {
+    if (inComposition($_GET['Idingredient'], $_GET['idRecette'])) {
         // Retour à la page de modification de la recette pour afficher la même recette et l'erreur
         header("Location: ./loadRecette.php?erreur=ingredientAlreadyExist&modifier=".$_GET['idRecette']);                 
         exit();
