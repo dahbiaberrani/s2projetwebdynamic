@@ -136,7 +136,7 @@
         // affichage chaque recettes
         if($table_recette_resultat){
             $ligne_recette=mysqli_fetch_object($table_recette_resultat);
-            echo ("<div class=\"recette\" id=\"".."\">");
+            echo ("<div class=\"recette\" id=\"".$_idRecette."\">");
             afficherControlRecetteAdmin($_idRecette);
             echo("<h1>".$ligne_recette->Nomcategorie.":".$ligne_recette->Nomrecette."</h1><img class =\"center\" src=".$ligne_recette->Imagepath."><br><h4> pour ".$ligne_recette->Nombrepersonne." Personne, Coût:".$ligne_recette->Cout."€</h4>");
             // affichage chaque Ingrediens 
@@ -422,6 +422,20 @@ function inComposition($_idIngredient, $_idRecette){
     }
     mysqli_close($connexion);
     return $resultat;
+}
+
+// Fonction pour ajouté une recette à la liste des recettes à modérer par l'administarteur
+function ajouterModeration($Id_recette){
+    $connexion= my_connect();
+    $requette_moderation="INSERT INTO `Moderations` (`Idmoderation`) VALUES (\"".$Id_recette."\")";
+   
+    $table_moderations_resultat =  mysqli_query($connexion,$requette_moderation);   
+    if(!$table_moderations_resultat) {      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        echo $requette_moderation;
+    }
+    mysqli_close($connexion);
 }
 
 ?>

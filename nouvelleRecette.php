@@ -112,7 +112,7 @@
                 // Iinsertion des ingrédients de la recettes
                 foreach($_SESSION["mes_ingredients"] as $key=>$quantite){
                     $requette2= "INSERT INTO `Compositions` (`Idingredient`, `Idrecette`, `Quantitee`, `Unite`) 
-                            VALUES (\"". $key."\", \"". $Id_recette."\", \"".  $quantite."\", \"".  $_SESSION["uniteMesure"][$key]."\" )";
+                            VALUES (\"". $key."\", \"".$Id_recette."\", \"". $quantite."\", \"". $_SESSION["uniteMesure"][$key]."\" )";
                     $resultat2 = mysqli_query($connexion,$requette2);
                     
                     if (!$resultat2) {
@@ -154,8 +154,11 @@
 
     include_once("./entete.php");  
     
-    //gestion des erreurs du formulaire
-    if ($_erreur === "NoFileImage"){
+    // Affichage des erreurs ou succès du formulaire
+    if ($_GET["succes"] === "SuccesAjout"){
+        echo "<h1 id=\"headersuccess\" >Recette ajoutée et en attente de modération !</h1>";
+    }
+    elseif ($_erreur === "NoFileImage"){
         echo "<h1 id=\"headererror\" >Veuillez sélectionner une image !</h1>";
     }
     elseif($_erreur === "ExtentionImage"){
@@ -206,11 +209,13 @@
                 </fieldset>
 
                 <!-- Afficahge de l'image si elle à été rajoutée -->
+                <div class="imageChargee">
                 <?php 
                     if (isset($_SESSION['imagePath'])){
                         echo "<img class =\"center\" src=\"".$_SESSION['imagePath']."\">";  
                     }
-                ?>
+                ?>  
+                </div>
                 <br>
                 <!-- Nom recette -->
                 <div id="nom_recette">

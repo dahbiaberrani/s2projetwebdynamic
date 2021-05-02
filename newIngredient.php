@@ -3,8 +3,8 @@
     <?php include("./entete.php");?>
     </head>
     <body>
-            <div id="nouv_ingredient">
-                <form action="newIngredient.php" method="POST">
+        <div id="nouv_ingredient">
+            <form action="newIngredient.php" method="POST">
                 <div>
                     <label for="nouv_ingredient">nom ingredient:</label>
                     <input  id="nouvIngredient" name="nouvIngredient" type="text" value="<?php if (!isset($_POST['annuler'])){ echo $_POST['nouvIngredient'];} ?>" > 
@@ -16,8 +16,9 @@
                     <input value="ajouter" name="ajouter" type="submit"/> 
                     <input value="annuler" name="annuler" type="submit"/> 
                 <div>
-                </form>
-            </div>
+            </form>
+        </div>
+        <?php include_once("./pied_de_page.html");?>
     </body>     
 </html>
 

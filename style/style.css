@@ -48,6 +48,12 @@ h1{
     text-align: center;
 }
 
+
+#headersuccess {
+    color: green;
+    text-align: center;
+}
+
 footer{
     background-color: rgb(75, 209, 209);;
     /*position: fixed;*/
@@ -67,9 +73,9 @@ td {
 }
 
 img{
-    border-radius: 20px;
-    border: 1px solid blueviolet;
-    border-radius: 10px;
+    border-radius: 30px;
+    border: 2px solid blueviolet;
+    border-radius: 30px;
     padding: 5px; 
     width: 50%;
 }
@@ -88,6 +94,12 @@ img.center{
     border-style:double;
     border-color:blue;
 
+}
+
+.imageChargee{
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-bottom: 50px;
 }
 #nouv_ingredient{
     padding-left: 200px;

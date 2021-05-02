@@ -9,12 +9,12 @@
         exit();
     }
 
-    if (isset($_GET["commenter"])){
+    if (isset($_GET["commenter"]) && !empty($_GET["commentaire"])){
         $_idRecette = $_GET["commenter"];
         $_date = date("Y-m-d");
         $_commentaire = $_SESSION["user"].":".$_GET["commentaire"];
         insererCommentaire($_idRecette, $_date, $_commentaire);
-        header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]);                 
+        header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]."#".$_idRecette);                 
         exit();
     }
 ?>
