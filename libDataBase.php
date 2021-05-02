@@ -118,13 +118,26 @@
                 echo "</div>";     
             }
    
-            //Ajout du boutton Ajouter aux Favoris
-            echo "<div class=\"controlAdmin\">";
-                echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
-                    echo "<button type=\"submit\">ajouter aux favoris</button>";
-                    echo "<input type=\"hidden\"  name=\"ajoutFavoris\" value=\"".$_idRecette."\">";
-                echo "</form>";    
-            echo "</div>";   
+            if (isFavoris($_idRecette)) {
+                // Affichage de l'icone pour indiquer qu'elle fait aprtie des favoris
+                echo "<img class=\"favoris\"src=./images/favoris.jpg>";
+                // Ajout du boutton Supprimer des Favoris
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">supprimer des favoris</button>";
+                        echo "<input type=\"hidden\"  name=\"supprimerFavoris\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>"; 
+            }
+            else {         
+                // Ajout du boutton Ajouter aux Favoris
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">ajouter aux favoris</button>";
+                        echo "<input type=\"hidden\"  name=\"ajoutFavoris\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>";   
+            }
 
         }
     }
@@ -494,7 +507,7 @@ function afficherRecettePourModeration($_idRecette){
     }
     else{
         echo "<p>Erreur dans l'exécution de la requette</p>";
-        echo"message de mysqli:".mysqli_error($connexion);
+        echo "message de mysqli:".mysqli_error($connexion);
     }
     mysqli_close($connexion);
 }
@@ -538,7 +551,7 @@ function ajouterAuxFavoris($_idRecette){
     $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
     if(!$table_favoris_resultat) {      
         echo "<p>Erreur dans l'exécution de la requette</p>";
-        echo"message de mysqli:".mysqli_error($connexion);
+        echo "message de mysqli:".mysqli_error($connexion);
         echo $requette_moderation;
     }
     mysqli_close($connexion);
@@ -547,17 +560,37 @@ function ajouterAuxFavoris($_idRecette){
 // Fonction qui permet de savoir si une recette fait partis des favoris de l'utlisateur connecté
 function isFavoris($_idRecette){
     $connexion= my_connect();
-    $requette_favoris="INSERT INTO `Favoris` (`Idrecette`, `Idutilisateur`) VALUES (\"".$_idRecette."\",\"".$_SESSION["userid"]."\")";
-   
+    $requette_favoris="SELECT Idutilisateur FROM Favoris WHERE Idutilisateur =".$_SESSION["userid"]." and Idrecette =".$_idRecette;
     $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
-    if(!$table_favoris_resultat) {      
+    if($table_favoris_resultat){    
+        if (mysqli_num_rows($table_favoris_resultat) == 0) {
+            $resultat = false;
+        }  
+        else {
+            $resultat = true;
+        }
+    }
+    else {
         echo "<p>Erreur dans l'exécution de la requette</p>";
-        echo"message de mysqli:".mysqli_error($connexion);
-        echo $requette_moderation;
+        echo "message de mysqli:".mysqli_error($connexion);
+        echo $requette_favoris;
     }
     mysqli_close($connexion);
+    return $resultat;
+}
 
-    return FALSE;
+// Fonction pour supprimer une recette de la liste des favoris de l'utilisateur connecté
+function supprimerDesFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="DELETE FROM Favoris WHERE Idutilisateur =".$_SESSION["userid"]." and Idrecette =".$_idRecette;
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if(!$table_favoris_resultat){    
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo "message de mysqli:".mysqli_error($connexion);
+        echo $requette_favoris;
+    }
+    mysqli_close($connexion);
+    return $resultat;
 }
 
 ?>

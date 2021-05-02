@@ -28,4 +28,13 @@
         header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]."#".$_idRecette);                 
         exit();
     }
+
+     // Suppresion d'une recette dans ses favoris par un utilisateur ou l'administarteur
+     if (isset($_GET["supprimerFavoris"])){
+        $_idRecette = $_GET["supprimerFavoris"];
+        supprimerDesFavoris($_idRecette);
+        header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]."#".$_idRecette);                 
+        exit();
+    }
+    supprimerFavoris
 ?>
