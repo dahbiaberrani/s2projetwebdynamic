@@ -1,6 +1,11 @@
 <?php 
     session_start();
     include_once("./libDataBase.php");
+    // Protection si jamais on s'amuse à appeler direcetement cette page dans l'url sans s'authentifier
+    if(!isset($_SESSION["userid"]) or $_SESSION["user"] !== "admin"){
+        header('Location: ./index.php');
+        exit();
+    }
     if (isset($_GET["refuser"])){
         $_idRecette = $_GET["refuser"];
         refuserRecette($_idRecette);
