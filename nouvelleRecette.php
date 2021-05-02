@@ -1,7 +1,11 @@
 <?php  
     session_start();
     include_once('./libDataBase.php') ;
-
+    // Protection si jamais on s'amuse à appeler direcetement cette page dans l'url sans s'authentifier
+    if(!isset($_SESSION["userid"])){
+        header('Location: ./index.php');
+        exit();
+    }
     // Charegement de l'image sélectionnée sur le serveur dans le répertoire images.
     if (isset($_POST['uploadImage'])){
         // Tableaux de donnees
