@@ -99,18 +99,33 @@
 
     //fonction qui affiche les boutons de contrôl de la recette selon le type de connexion (administrateur ou simple utilisateur)
     function afficherControlRecetteAdmin($_idRecette){
-        if ($_SESSION["user"] === "admin" ){
-            //Ajout du bouton suppprimer
-            echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
-            echo "<button type=\"submit\">supprimer</button>";
-            echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
-            echo "</form>";
+        if (isset($_SESSION["user"])) {
+            if ($_SESSION["user"] === "admin" ){
+                //Ajout du bouton suppprimer
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">supprimer</button>";
+                        echo "<input type=\"hidden\"  name=\"supprimer\" value=\"".$_idRecette."\">";
+                    echo "</form>";
+                echo "</div>";
 
-            //Ajout du boutton modifier (mise à jour)
-            echo "<form action=\"./loadRecette.php\" method=\"GET\">";
-            echo "<button type=\"submit\">modifier</button>";
-            echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
-            echo "</form>";         
+                //Ajout du boutton modifier (mise à jour)
+                echo "<div class=\"controlAdmin\">";
+                    echo "<form action=\"./loadRecette.php\" method=\"GET\">";
+                        echo "<button type=\"submit\">modifier</button>";
+                        echo "<input type=\"hidden\"  name=\"modifier\" value=\"".$_idRecette."\">";
+                    echo "</form>";    
+                echo "</div>";     
+            }
+   
+            //Ajout du boutton Ajouter aux Favoris
+            echo "<div class=\"controlAdmin\">";
+                echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
+                    echo "<button type=\"submit\">ajouter aux favoris</button>";
+                    echo "<input type=\"hidden\"  name=\"ajoutFavoris\" value=\"".$_idRecette."\">";
+                echo "</form>";    
+            echo "</div>";   
+
         }
     }
 
@@ -441,17 +456,21 @@ function ajouterModeration($Id_recette){
 //fonction qui affiche les boutons de contrôl pour la modération d'une recette par l'administrateur (acceptation ou Refuser)
 function afficherControlRecetteAdminModeration($_idRecette){
     if ($_SESSION["user"] === "admin" ){
-         //Ajout du boutton Accepter (mise à jour)
-         echo "<form action=\"./modererRecette.php\" method=\"GET\">";
-         echo "<button type=\"submit\">accepter</button>";
-         echo "<input type=\"hidden\"  name=\"accepter\" value=\"".$_idRecette."\">";
-         echo "</form>"; 
+        //Ajout du boutton Accepter 
+        echo "<div class=\"controlAdmin\">";
+            echo "<form  action=\"./modererRecette.php\" method=\"GET\">";
+                echo "<button type=\"submit\">accepter</button>";
+                echo "<input type=\"hidden\"  name=\"accepter\" value=\"".$_idRecette."\">";
+            echo "</form>"; 
+        echo "</div>";
 
         //Ajout du bouton Refuser
-        echo "<form action=\"./modererRecette.php\" method=\"GET\">";
-        echo "<button type=\"submit\">refuser</button>";
-        echo "<input type=\"hidden\"  name=\"refuser\" value=\"".$_idRecette."\">";
-        echo "</form>";        
+        echo "<div class=\"controlAdmin\">";
+            echo "<form  action=\"./modererRecette.php\" method=\"GET\">";
+                echo "<button type=\"submit\">refuser</button>";
+                echo "<input type=\"hidden\"  name=\"refuser\" value=\"".$_idRecette."\">";
+            echo "</form>";
+        echo "</div>";        
     }
 }
 
@@ -509,6 +528,36 @@ function  accepterRecette($_idRecette){
         echo $requette_recettes;
     }
     mysqli_close($connexion);
+}
+
+// Fonction pour rajouter une recette à ses favoris
+function ajouterAuxFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="INSERT INTO `Favoris` (`Idrecette`, `Idutilisateur`) VALUES (\"".$_idRecette."\",\"".$_SESSION["userid"]."\")";
+   
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if(!$table_favoris_resultat) {      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        echo $requette_moderation;
+    }
+    mysqli_close($connexion);
+}
+
+// Fonction qui permet de savoir si une recette fait partis des favoris de l'utlisateur connecté
+function isFavoris($_idRecette){
+    $connexion= my_connect();
+    $requette_favoris="INSERT INTO `Favoris` (`Idrecette`, `Idutilisateur`) VALUES (\"".$_idRecette."\",\"".$_SESSION["userid"]."\")";
+   
+    $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+    if(!$table_favoris_resultat) {      
+        echo "<p>Erreur dans l'exécution de la requette</p>";
+        echo"message de mysqli:".mysqli_error($connexion);
+        echo $requette_moderation;
+    }
+    mysqli_close($connexion);
+
+    return FALSE;
 }
 
 ?>
