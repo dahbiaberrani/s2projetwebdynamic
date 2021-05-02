@@ -119,8 +119,6 @@
             }
    
             if (isFavoris($_idRecette)) {
-                // Affichage de l'icone pour indiquer qu'elle fait aprtie des favoris
-                echo "<img class=\"favoris\"src=./images/favoris.jpg>";
                 // Ajout du boutton Supprimer des Favoris
                 echo "<div class=\"controlAdmin\">";
                     echo "<form action=\"./traitementAdminRecette.php\" method=\"GET\">";
@@ -128,6 +126,8 @@
                         echo "<input type=\"hidden\"  name=\"supprimerFavoris\" value=\"".$_idRecette."\">";
                     echo "</form>";    
                 echo "</div>"; 
+                // Affichage de l'icone pour indiquer qu'elle fait aprtie des favoris
+                echo "<img class=\"favoris\"src=./images/favoris.jpg>";
             }
             else {         
                 // Ajout du boutton Ajouter aux Favoris

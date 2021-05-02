@@ -36,5 +36,4 @@
         header('Location: ./resultatRecherche.php?categorie='.$_SESSION["categorie"]."&cout=".$_SESSION["cout"]."#".$_idRecette);                 
         exit();
     }
-    supprimerFavoris
 ?>
