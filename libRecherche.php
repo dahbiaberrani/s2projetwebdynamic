@@ -175,4 +175,23 @@
         }
         mysqli_close($connexion);
     }
+
+    // Fonction pour afficher uniquement les recettes dans la liste des favoris de l'utilisateur connecté
+    function afficherRecetteFavorites(){
+        $connexion= my_connect();
+        // Récupération des recettes 
+        $requette_recette="SELECT Idrecette FROM Favoris WHERE Idutilisateur =".$_SESSION["userid"];      
+                
+        $table_recette_resultat =  mysqli_query($connexion,$requette_recette);
+        // affichage chaque recettes
+        if($table_recette_resultat){
+            while($ligne_recette=mysqli_fetch_object($table_recette_resultat)){
+                afficherRecette($ligne_recette->Idrecette);
+            }
+        }else{
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo"message de mysqli:".mysqli_error($connexion);
+        }
+        mysqli_close($connexion);
+    }
 ?>
