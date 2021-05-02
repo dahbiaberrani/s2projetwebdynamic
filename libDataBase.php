@@ -243,8 +243,24 @@
         mysqli_close($connexion);
     }
 
+    // Fonction qui supprime une recette de toutes les listes de favoris de tous les utilisateurs
+    function supprimerFavoris($_idRecette){
+        // recherche de tout les référencement favoris
+        $connexion= my_connect();
+        $requette_favoris="DELETE FROM Favoris where Idrecette = $_idRecette";
+        $table_favoris_resultat =  mysqli_query($connexion,$requette_favoris);   
+        if(!$table_favoris_resultat){      
+            echo "<p>Erreur dans l'exécution de la requette</p>";
+            echo "message de mysqli:".mysqli_error($connexion)."<br>";
+            echo $requette_favoris;
+        }
+        mysqli_close($connexion);
+    }
+
     // fonction qui supprime une recette de la base de donnees 
     function supprimerRecette($_idRecette){
+        // suppression de la table des favoris des tilisateurs qui l'ot msie comme favoris
+        supprimerFavoris($_idRecette);
         // suppression de tout les commentaires de la recette
         supprimerToutCommentaires($_idRecette);
         // suppression des ingrédients de la recette
