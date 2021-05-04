@@ -13,7 +13,7 @@
 				<option value="dessert">Dessert</option>
 			</select> 
 			<label  for = 'categorie'>Coûtant moins de: </label>
-			<input  id="cout" name ="cout" type="number" step ="0.01" >
+			<input  id = "cout" name ="cout" type="number" step ="0.01" >
 			<label  for = 'categorie'>€</label>
 			<br/> 
 			<input value="Selectionner" type="submit"/> 
